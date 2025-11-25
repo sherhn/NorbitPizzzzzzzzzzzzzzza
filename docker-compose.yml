@@ -2,7 +2,6 @@ x-common-variables: &common-variables
   env_file:
     - .env
 
-
 services:
 
   # NGINX — проксирует статику и API
@@ -18,21 +17,45 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # === АУТЕНТИФИКАЦИЯ ===
+  orders:
+    build: ./orders
+    <<: *common-variables
+    container_name: pizza_orders
+    restart: unless-stopped
+    depends_on:
+      db_orders:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONHASHSEED=random
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/api/orders/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   # === БАЗА ДАННЫХ ===
-  db:
+  db_orders:
     image: postgres:16-alpine
     <<: *common-variables
-    container_name: pizza_db
+    container_name: pizza_db_orders
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${ORDERS_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ORDERS_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${ORDERS_POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init-scripts:/docker-entrypoint-initdb.d
+      - postgres_orders_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${ORDERS_POSTGRES_USER} -d ${ORDERS_POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -74,7 +97,7 @@ services:
     container_name: pizza_admin
     restart: unless-stopped
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.loh
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION=True
       - PGADMIN_CONFIG_SERVER_MODE=True
@@ -83,7 +106,7 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
-      db:
+      db_orders:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/login" ]
@@ -98,6 +121,6 @@ services:
         max-file: "3"
 
 volumes:
-  postgres_data:
+  postgres_orders_data:
   redis_data:
   pgadmin_data:
