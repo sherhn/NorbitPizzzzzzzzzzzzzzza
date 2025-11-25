@@ -6,88 +6,146 @@
     <title>Главная</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="script.js" defer></script>
 
 </head>
-<body class="bg-white text-gray-900">
+<body class="bg-black text-white">
+
     <header class = "flex items-center justify-between p-4 border-b">
         <div class = "flex items-center gap-4">
             <div class = "flex items-center gap-3">
-                <img src = "" alt="logo">
-                <div>
-                <h1 class = "text-lg font-semibold">2323</h1>
-                </div>
+                <img src = "../images/logo.jpg" alt="logo" class = "h-10">
             </div>
         </div>
 
         <!--Выпадающие списки-->
-
-        <div class = "flex items-center gap-2">
+        <div class = "flex items-center gap-2 ">
+            <div>
         <label class = "text-sm text-gray-500">Город</label>
-        <select id="citySelect" class="border rounded px-2 py-1">
+        <select id="citySelect" class=" bg-black border rounded px-2 py-1">
             <option value = "moscow">Москва</option>
-            <option value = "moscow">Казань</option>
-            <option value="spb">Солевой</option>
+            <option value = "kazan">Казань</option>
+            <option value="spb">Санкт-Петербург</option>
         </select>
+            </div>
         
-        <label class = "text-sm text-gray-500">Языу</label>
-        <select id="langSelect" class="border rounded px-2 py-1">
+        <label class = "text-sm text-gray-500">Язык</label>
+        <div>
+        <select id="langSelect" class="bg-black border rounded px-2 py-1">
             <option value = "ru">Русский</option>
             <option value = "en">Английский</option>
             <option value = "ch">Китайский</option>
         </select>
-        
-        <!--Менюшка-->
-        <nav class = "flex items-center gap-3">
-            <a class = "px-3 py-1" href="#pizzas">Комбо</a>
-            <a class = "px-3 py-1" href="#drinks">Пиццы</a>
-            <a class = "px-3 py-1" href="#junkfood">Закуски</a>
-            <div class = "controls">
-                <button class = "toggle" id = "themeToggle" aria-pressed="false">Темная тема</button>
-                <a class="bg-orange-500 text-white px-4 py-2 rounded-full" href="#">Корзина</a>
-            </div>
-            </nav>
+        </div>
+        <label class="text-sm px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Недавние заказы</label>
+        <label class="text-sm px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Избранное</label>
     </header>
+
+        <!--Менюшка-->
+    <div class="sticky top-16 bg-gray-50 z-10 border-b flex items-center bg-red-500">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex gap-3 items-center">
+    <a href="#pizzas" class="px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Наиболее популярные</a>
+    <a href="#pizzas" class="px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Пиццы</a>
+    <a href="#drinks" class="px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Напитки</a>
+    <a href="#junkfood" class="px-4 py-2 rounded-full bg-black shadow hover:bg-red-100">Закуски</a>
+
+    <section class = "mb-6 p-4 bg-black-800 rounded">
+        <h2 class = "text-2xl font-semibold mb-4">Фильтры</h2>
+        <div class = "flex items-center gap-4">
+            <div>
+                <label class = "block mb-1">Тип пиццы:</label>
+                <select id="typeFilter" class=" bg-black border rounded px-2 py-1">
+                    <option value="all">Все</option>
+                    <option value="meat">Мясные</option>
+                    <option value="vegetarian">Вегетарианские</option>
+                    <option value="vegan">Веганские</option>
+                </select>
+            </div>
+            <div>
+                <label class = "block mb-1 ">Макс. цена:</label>
+                <input type="number" id="priceFilter" class="bg-black border rounded px-2 py-1">
+            </div>
+            <div class="flex items-end">
+                <button id="applyFilters" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-orange-600">Применить</button>
+            </div>
+        </div>
+    </section>
+    </div>
+    </div>
 
 <main class = "max-w-6xl mx-auto px-4 py-6">
     
     <!--Каталог-->
-
     <section>
-        <div class = "flex items-center justify-between mb-4">
-            <h2 class = "text-2x1 font-semibold">Каталог</h2>
-        </div>    
         
     <!--Пиццы-->
-    <section id ="pizzas" clas = "mb-12">
-        <div class = "flex items-center justify-between mb-4">
+    <section id ="pizzas" class = "mb-12">
+        <div id="pizzaList" class = "flex items-center justify-between mb-4">
             <h2 class = "text 2xl font-semibold">Пиццы</h2>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <article class = "bg-white rounded-lg shadow overflow-hidden">
-        <img src = "" alt ="pizza1" class = "w-full h-44 object-cover"/>
+            <div id="pizzaList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="1" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
+        <img src = "..\images\peeperoni.png" alt ="pizza1" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
-        <h3 class = "font-semibold"> Пицца 1 </p>
+        <h3 class = "font-semibold text-center"> Пеперонии </p>
         <p class = "text-sm text-gray-500">30 см</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">11 рублей</div>
+            <div class = "text-yellow-600 font-bold">11 рублей</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
     </article>
 
-    <article class = "bg-white rounded-lg shadow overflow-hidden">
+    <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="2" data-type="vegetarian" data-price="10" data-name="Маргарита" data-ingredients="Маргарита, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
+        <img src = "..\images\margarita.png" alt ="pizza1" class = "w-full h-44 object-cover"/>
+        <div class = "p-4">
+        <h3 class = "font-semibold"> Итальянская </h3>
+        <p class = "text-sm text-gray-500">15 см</p>
+        <div class = "mt-3 flex items-center justify-between">
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
+                <div class = "flex gap-2">
+                </div>
+            </div>
+        </div>
+    </article>
+     <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="3" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
+        <img src = "" alt ="pizza2" class = "w-full h-44 object-cover"/>
+        <div class = "p-4">
+        <h3 class = "font-semibold"> Веганская </h3>
+        <p class = "text-sm text-gray-500">15 см</p>
+        <div class = "mt-3 flex items-center justify-between">
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
+                <div class = "flex gap-2">
+                </div>
+            </div>
+        </div>
+    </article>
+     <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="4" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
+        <img src = "" alt ="pizza2" class = "w-full h-44 object-cover"/>
+        <div class = "p-4">
+        <h3 class = "font-semibold"> Вегансая Лайт </h3>
+        <p class = "text-sm text-gray-500" >15 см</p>
+        <div class = "mt-3 flex items-center justify-between">
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
+                <div class = "flex gap-2">
+                </div>
+            </div>
+        </div>
+    </article>
+     <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="5" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
         <img src = "" alt ="pizza2" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
         <h3 class = "font-semibold"> Пицца 2 </h3>
         <p class = "text-sm text-gray-500">15 см</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">10 рублей</div>
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
@@ -101,31 +159,29 @@
             <h2 class = "text 2xl font-semibold">Напитки</h2>
         </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <article class = "bg-white rounded-lg shadow overflow-hidden">
+    <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="1" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
         <img src = "" alt ="cola" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
         <h3 class = "font-semibold"> Кола</h3>
         <p class = "text-sm text-gray-500">0.5Л</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">10 рублей</div>
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
     </article>
 
-    <article class = "bg-white rounded-lg shadow overflow-hidden">
+    <article class="pizza-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="5" data-type="sprite" data-price="10" data-name="Спрайт" data-ingredients="Спрайт, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
         <img src = "" alt ="sprite" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
         <h3 class = "font-semibold"> Спрайт </h3>
         <p class = "text-sm text-gray-500">0.4 Л</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">10 рублей</div>
+            <div class = "text-yellow-600 font-bold">10 рублей</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
@@ -140,41 +196,69 @@
             <h2 class = "text 2xl font-semibold">Закуски</h2>
         </div>
      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-     <article class = "bg-white rounded-lg shadow overflow-hidden">
+     <article class="junkfood-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="6" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
         <img src = "" alt ="Frenchfries" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
         <h3 class = "font-semibold"> Картошка фри </h3>
         <p class = "text-sm text-gray-500">Маленький</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">25 рубелй</div>
+            <div class = "text-yellow-600 font-bold">25 рубелй</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
     </article>
 
-    <article class = "bg-white rounded-lg shadow overflow-hidden">
+    <article class="junkfood-card bg-gray-400 text-white rounded-lg shadow overflow-hidden cursor-pointer"
+               data-id="7" data-type="meat" data-price="11" data-name="Пепперони" data-ingredients="Пепперони, сыр, томатный соус" data-bju="Б:12 Ж:10 У:30">
         <img src = "" alt ="Chikenwings" class = "w-full h-44 object-cover"/>
         <div class = "p-4">
         <h3 class = "font-semibold"> Куринные крылышки </h3>
         <p class = "text-sm text-gray-500">6 штук</p>
         <div class = "mt-3 flex items-center justify-between">
-            <div class = "text-orange-600 font-bold">30 рублей</div>
+            <div class = "text-yellow-600 font-bold">30 рублей</div>
                 <div class = "flex gap-2">
-                <button class = "px-3 py-1 border rounder">Select</button>
-                <button class = "px-3 py-1 bg-orange-500 text-white rounded">Order</button>
                 </div>
             </div>
         </div>
     </article>
      </div>
     </section>
+
+    <button id="cartButton" class = "fixed bottom-6 right-6 bg-red-500 text-white w-16 h-16 rounded-full shadow-lg 
+    flex items-center hover:bg-red-500 transition">Корзина <span>0</span>
+    </button>
+
+    <!--Модальное окно корзины-->
+    <div id="pizzaModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-800 text-white rounded-lg w-96 p-6 relative">
+    <button id="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-white">✖</button>
+    <h2 id="modalName" class="text-2xl font-semibold mb-2"></h2>
+    <p id="modalIngredients" class="mb-2 text-gray-300"></p>
+    <p id="modalBJU" class="mb-4 text-gray-300"></p>
+
+    <div class="mb-4">
+      <label class="block mb-1">Размер:</label>
+      <select id="modalSize" class="px-2 py-1 rounded bg-gray-700">
+        <option value="30">30 см</option>
+        <option value="25">25 см</option>
+        <option value="20">20 см</option>
+      </select>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button id="addToCartModal" class="px-4 py-2 bg-orange-500 rounded hover:bg-orange-600">Добавить в корзину</button>
+      <span id="modalPrice" class="text-orange-500 font-bold"></span>
+    </div>
+  </div>
+</div>
+
 </main>
 
     <footer class="border-t mt-8 py-6">
         <div class="max-w-6xl mx-auto px-4 text-sm text-gray-500">123</div>
+        <div class="max-w-6xl mx-auto px-4 text-sm text-gray-500">Сообщить о проблеме</div>
     </footer>
 </section>
 
