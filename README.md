@@ -10,7 +10,7 @@
 
 # ```powershell
 
-# .\\build\\rebuild.ps1
+# .\\make\\rebuild.ps1
 
 # ```
 
@@ -28,13 +28,13 @@
 
 # \# По умолчанию (суффикс "web")
 
-# .\\build\\rebuild\_image.ps1
+# .\\make\\rebuild\_image.ps1
 
 # 
 
 # \# С указанием суффикса
 
-# .\\build\\rebuild\_image.ps1 -s "db"
+# .\\make\\rebuild\_image.ps1 -s "db"
 
 # ```
 
