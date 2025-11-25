@@ -17,7 +17,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # === АУТЕНТИФИКАЦИЯ ===
+  # === ЗАКАЗЫ ===
   orders:
     build: ./orders
     <<: *common-variables
@@ -42,7 +42,32 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # === БАЗА ДАННЫХ ===
+  # === ОСНОВНОЕ МЕНЮ ===
+  main:
+    build: ./main
+    <<: *common-variables
+    container_name: pizza_main
+    restart: unless-stopped
+    depends_on:
+      db_orders:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONHASHSEED=random
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5000/api/main/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # === БАЗА ДАННЫХ ORDERS ===
   db_orders:
     image: postgres:16-alpine
     <<: *common-variables
@@ -56,6 +81,31 @@ services:
       - postgres_orders_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${ORDERS_POSTGRES_USER} -d ${ORDERS_POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # === БАЗА ДАННЫХ MAIN ===
+  db_main:
+    image: postgres:16-alpine
+    <<: *common-variables
+    container_name: pizza_db_main
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${MAIN_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${MAIN_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${MAIN_POSTGRES_DB}
+    volumes:
+      - postgres_main_data:/var/lib/postgresql/data
+      - ./main/init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${MAIN_POSTGRES_USER} -d ${MAIN_POSTGRES_DB}" ]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -122,5 +172,6 @@ services:
 
 volumes:
   postgres_orders_data:
+  postgres_main_data:
   redis_data:
   pgadmin_data:
