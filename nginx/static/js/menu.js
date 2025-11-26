@@ -368,13 +368,8 @@ function addCartEventListeners() {
             const productId = this.getAttribute('data-product-id');
 
             // Визуальная обратная связь
-            const originalHTML = this.innerHTML;
             this.innerHTML = '<i class="fas fa-plus"></i>';
-
-            setTimeout(() => {
-                this.innerHTML = originalHTML;
-            }, 1000);
-
+            
             // Добавляем в корзину
             if (typeof addToCart === 'function') {
                 addToCart(productId);
