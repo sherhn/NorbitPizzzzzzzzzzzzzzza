@@ -114,7 +114,6 @@ async function addToCart(productId, button = null) {
         const originalHTML = button.innerHTML;
         button.innerHTML = '<i class="fas fa-plus"></i>';
         button.classList.remove('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
-        button.classList.add('bg-yellow-600');
     }
 
     try {
@@ -156,7 +155,6 @@ async function addToCart(productId, button = null) {
             setTimeout(() => {
                 button.disabled = false;
                 button.innerHTML = '<i class="fas fa-shopping-basket"></i>';
-                button.classList.remove('bg-yellow-600');
                 button.classList.add('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
             }, 1000);
         }
@@ -347,9 +345,9 @@ function updateCartContent() {
     if (!Array.isArray(cartItems) || cartItems.length === 0) {
         cartContent.innerHTML = `
             <div class="text-center py-12">
-                <i class="fas fa-shopping-basket text-6xl text-gray-700 mb-4"></i>
+                <i class="fas fa-shopping-basket text-6xl text-stone-700 mb-4"></i>
                 <h3 class="text-xl font-bold mb-2">Корзина пуста</h3>
-                <p class="text-gray-400">Добавьте товары из меню</p>
+                <p class="text-stone-400">Добавьте товары из меню</p>
             </div>
         `;
         if (checkoutButton) {
@@ -385,24 +383,24 @@ function createCartItemHTML(item) {
     const totalCost = (productCost * quantity).toFixed(6);
 
     return `
-        <div class="bg-gray-800/50 rounded-xl p-4 mb-3 border border-gray-700">
+        <div class="bg-stone-800/50 rounded-xl p-4 mb-3">
             <div class="flex justify-between items-start mb-2">
                 <div class="flex-1">
                     <h4 class="font-semibold text-sm mb-1">${productName}</h4>
-                    <p class="text-xs text-gray-400">${(productCost || 0).toFixed(6)} Ł × ${quantity}</p>
+                    <p class="text-xs text-stone-400">${(productCost || 0).toFixed(6)} Ł × ${quantity}</p>
                 </div>
-                <button onclick="removeFromCart(${productId})" class="ml-2 text-gray-400 hover:text-accent-red transition-colors" title="Удалить">
+                <button onclick="removeFromCart(${productId})" class="ml-2 text-stone-400 hover:text-accent-red transition-colors" title="Удалить">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <button onclick="decreaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-xs transition-colors">
+                    <button onclick="decreaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-xs transition-colors">
                         <i class="fas fa-minus"></i>
                     </button>
                     <span class="text-sm font-medium min-w-8 text-center" id="quantity-${productId}">${quantity}</span>
-                    <button onclick="increaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-xs transition-colors">
+                    <button onclick="increaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-xs transition-colors">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>

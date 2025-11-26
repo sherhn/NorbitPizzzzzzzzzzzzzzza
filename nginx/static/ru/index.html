@@ -29,7 +29,7 @@
 </head>
 <body class="bg-primary text-white font-sans">
     <!-- Хидер -->
-    <header class="sticky top-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-gray-800">
+    <header class="sticky top-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-stone-800 border-opacity-70">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <!-- Логотип -->
             <div class="flex items-center space-x-3">
@@ -41,32 +41,32 @@
             <div class="flex space-x-4">
                 <!-- Выбор города -->
                 <div class="relative group">
-                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl border border-gray-800 hover:border-gray-600 transition-all">
+                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl transition-all">
                         <i class="fas fa-map-marker-alt text-accent-yellow"></i>
                         <span>Москва</span>
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
-                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg border border-gray-800 rounded-xl shadow-lg z-10">
+                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg rounded-xl shadow-lg z-10">
                         <ul class="py-2">
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Курск</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Чебоксары</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Москва</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">Курск</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">Чебоксары</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">Москва</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Выбор языка -->
                 <div class="relative group">
-                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl border border-gray-800 hover:border-gray-600 transition-all">
+                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl transition-all">
                         <i class="fas fa-globe text-accent-yellow"></i>
                         <span>Русский</span>
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
-                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg border border-gray-800 rounded-xl shadow-lg z-10">
+                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg rounded-xl shadow-lg z-10">
                         <ul class="py-2">
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">English</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Русский</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Italiano</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">English</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">Русский</li>
+                            <li class="px-4 py-2 hover:bg-stone-800 cursor-pointer">Italiano</li>
                         </ul>
                     </div>
                 </div>
@@ -77,10 +77,10 @@
     <!-- Основной контент -->
     <main class="container mx-auto px-4 py-8">
         <!-- Приветственная секция -->
-        <section class="text-center mb-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-dark-bg to-primary p-8 md:p-12 border border-gray-800">
+        <section class="text-center mb-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-dark-bg to-primary p-8 md:p-12 border border-stone-900 border-opacity-20">
             <div class="max-w-3xl mx-auto relative z-10">
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">Наслаждайтесь искусством пиццы</h2>
-                <p class="text-xl mb-8 text-gray-300">Современные рецепты, традиционный вкус. Только свежие ингредиенты и море страсти в каждой пицце.</p>
+                <p class="text-xl mb-8 text-stone-300">Современные рецепты, традиционный вкус. Только свежие ингредиенты и море страсти в каждой пицце.</p>
                 <button id="menu-button" class="bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Исследовать меню
                 </button>
@@ -92,19 +92,19 @@
         <!-- Фильтры -->
         <section class="mb-12">
             <div class="flex justify-center">
-                <button id="filters-toggle" class="flex items-center space-x-2 bg-card-bg border border-gray-800 text-white px-6 py-3 rounded-2xl hover:border-gray-600 transition-all duration-300 group">
+                <button id="filters-toggle" class="flex items-center space-x-2 bg-card-bg text-white px-6 py-3 rounded-2xl transition-all duration-300 group">
                     <i class="fas fa-sliders-h text-accent-yellow group-hover:rotate-90 transition-transform"></i>
                     <span>Фильтры по ингредиентам</span>
                 </button>
             </div>
 
             <!-- Панель фильтров -->
-            <div id="filters-panel" class="hidden mt-6 bg-card-bg border border-gray-800 rounded-2xl p-6">
+            <div id="filters-panel" class="hidden mt-6 bg-card-bg rounded-2xl p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Фильтр по ингредиентам -->
                     <div class="md:col-span-2 lg:col-span-3">
                         <h3 class="text-lg font-bold mb-3 text-accent-yellow">Выберите ингредиенты</h3>
-                        <p class="text-sm text-gray-400 mb-4">Показываются все пиццы, содержащие выбранные ингредиенты</p>
+                        <p class="text-sm text-stone-400 mb-4">Показываются все пиццы, содержащие выбранные ингредиенты</p>
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-60 overflow-y-auto p-2">
                             <!-- Ингредиенты будут добавляться динамически -->
                         </div>
@@ -112,8 +112,8 @@
                 </div>
 
                 <!-- Кнопки управления фильтрами -->
-                <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-800">
-                    <button id="reset-filters" class="px-4 py-2 border border-gray-600 text-gray-300 rounded-xl hover:border-gray-400 transition-all">
+                <div class="flex justify-end space-x-3 mt-6 pt-4">
+                    <button id="reset-filters" class="px-4 py-2 border border-stone-600 text-stone-300 rounded-xl hover:border-stone-400 transition-all">
                         Сбросить фильтры
                     </button>
                     <button id="apply-filters" class="px-4 py-2 bg-gradient-to-r from-accent-red to-red-700 text-white rounded-xl hover:from-red-700 hover:to-accent-red transition-all">
@@ -127,7 +127,7 @@
         <section>
             <!-- Вкладки меню -->
             <div class="flex justify-center mb-10">
-                <div class="inline-flex bg-card-bg p-2 rounded-2xl border border-gray-800">
+                <div class="inline-flex bg-card-bg p-2 rounded-2xl">
                     <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="recent">
                         <i class="fas fa-history mr-2"></i>Недавние
                     </button>
@@ -152,38 +152,38 @@
                 <div id="pizzas" class="menu-tab-content active">
                     <div class="text-center py-8">
                         <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
-                        <p class="text-gray-400 mt-2">Загрузка пицц...</p>
+                        <p class="text-stone-400 mt-2">Загрузка пицц...</p>
                     </div>
                 </div>
 
                 <!-- Остальные вкладки -->
                 <div id="recent" class="menu-tab-content hidden">
                     <div class="text-center py-12">
-                        <i class="fas fa-history text-6xl text-gray-700 mb-4"></i>
+                        <i class="fas fa-history text-6xl text-stone-700 mb-4"></i>
                         <h3 class="text-2xl font-bold mb-2">История заказов пуста</h3>
-                        <p class="text-gray-400">Здесь будут отображаться ваши недавние заказы</p>
+                        <p class="text-stone-400">Здесь будут отображаться ваши недавние заказы</p>
                     </div>
                 </div>
 
                 <div id="snacks" class="menu-tab-content hidden">
                     <div class="text-center py-8">
                         <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
-                        <p class="text-gray-400 mt-2">Загрузка закусок...</p>
+                        <p class="text-stone-400 mt-2">Загрузка закусок...</p>
                     </div>
                 </div>
 
                 <div id="drinks" class="menu-tab-content hidden">
                     <div class="text-center py-8">
                         <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
-                        <p class="text-gray-400 mt-2">Загрузка напитков...</p>
+                        <p class="text-stone-400 mt-2">Загрузка напитков...</p>
                     </div>
                 </div>
 
                 <div id="favorites" class="menu-tab-content hidden">
                     <div class="text-center py-12">
-                        <i class="fas fa-heart text-6xl text-gray-700 mb-4"></i>
+                        <i class="fas fa-heart text-6xl text-stone-700 mb-4"></i>
                         <h3 class="text-2xl font-bold mb-2">Добавьте в избранное</h3>
-                        <p class="text-gray-400">Отмечайте понравившиеся блюда сердечком</p>
+                        <p class="text-stone-400">Отмечайте понравившиеся блюда сердечком</p>
                     </div>
                 </div>
             </div>
@@ -191,7 +191,7 @@
     </main>
 
     <!-- Футер -->
-    <footer class="bg-dark-bg border-t border-gray-800 mt-16 py-8">
+    <footer class="bg-dark-bg border-t border-stone-800 mt-16 py-8 border-opacity-70">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
@@ -199,7 +199,7 @@
                         <img src="/images/logo.png" alt="NorbitPizza" class="w-8 h-8 rounded-full">
                         <h2 class="text-xl font-bold bg-gradient-to-r from-accent-yellow to-accent-red bg-clip-text text-transparent">NorbitPizza</h2>
                     </div>
-                    <a class="text-gray-400 text-sm" href="https://youtu.be/dQw4w9WgXcQ?si=4evCqh7-n1Ja4hzE">© 2025 Все права защищены, ага прям так и защищены, лучше нажмите сюда, чем читать</a>
+                    <a class="text-stone-400 text-sm" href="https://youtu.be/dQw4w9WgXcQ?si=4evCqh7-n1Ja4hzE">© 2025 Все права защищены, ага прям так и защищены, лучше нажмите сюда, чем читать</a>
                 </div>
             </div>
         </div>
@@ -215,12 +215,12 @@
     <!-- Модальное окно корзины -->
     <div id="cart-modal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeCart()"></div>
-        <div class="absolute right-0 top-0 h-full w-96 bg-card-bg border-l border-gray-800 shadow-2xl transform transition-transform duration-300">
+        <div class="absolute right-0 top-0 h-full w-96 bg-card-bg border-l border-stone-800 border-opacity-70 shadow-2xl transform transition-transform duration-300">
             <div class="p-6 h-full flex flex-col">
                 <!-- Заголовок -->
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold">Корзина</h3>
-                    <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors">
+                    <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-stone-800 hover:bg-stone-700 flex items-center justify-center transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -228,14 +228,14 @@
                 <!-- Содержимое корзины -->
                 <div id="cart-content" class="flex-grow overflow-y-auto">
                     <div class="text-center py-12">
-                        <i class="fas fa-shopping-basket text-6xl text-gray-700 mb-4"></i>
+                        <i class="fas fa-shopping-basket text-6xl text-stone-700 mb-4"></i>
                         <h3 class="text-xl font-bold mb-2">Корзина пуста</h3>
-                        <p class="text-gray-400">Добавьте товары из меню</p>
+                        <p class="text-stone-400">Добавьте товары из меню</p>
                     </div>
                 </div>
 
                 <!-- Итог и кнопка заказа -->
-                <div class="border-t border-gray-800 pt-4 mt-4">
+                <div class="border-t border-stone-800 border-opacity-70 pt-4 mt-4">
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-lg font-semibold">Итого:</span>
                         <span id="cart-total" class="text-accent-yellow font-bold text-xl">0 Ł</span>

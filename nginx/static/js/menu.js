@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuTabs = document.querySelectorAll('.menu-tab');
     const menuContents = document.querySelectorAll('.menu-tab-content');
 
-    // В функции переключения вкладок в menu.js
+    // В функции переключения вкладок в меню
     menuTabs.forEach(tab => {
         tab.addEventListener('click', function() {
             const targetTab = this.getAttribute('data-tab');
@@ -208,8 +208,8 @@ function createIngredientFilters(products) {
 
     // Создаем чекбоксы для каждого ингредиента
     const ingredientsHTML = Array.from(allIngredients).sort().map(ingredient => `
-        <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-800 p-2 rounded-lg transition-colors border border-gray-700 rounded-xl">
-            <input type="checkbox" value="${ingredient}" class="rounded border-gray-600 bg-gray-700 text-accent-yellow focus:ring-accent-yellow">
+        <label class="flex items-center space-x-2 cursor-pointer hover:bg-stone-800 p-2 rounded-lg transition-colors border border-stone-700 rounded-xl">
+            <input type="checkbox" value="${ingredient}" class="rounded border-stone-600 bg-stone-700 text-accent-yellow focus:ring-accent-yellow">
             <span class="text-sm capitalize">${ingredient}</span>
         </label>
     `).join('');
@@ -249,9 +249,9 @@ function showEmptyState() {
         if (container) {
             container.innerHTML = `
                 <div class="text-center py-12">
-                    <i class="fas fa-pizza-slice text-6xl text-gray-700 mb-4"></i>
+                    <i class="fas fa-pizza-slice text-6xl text-stone-700 mb-4"></i>
                     <h3 class="text-2xl font-bold mb-2">Продукты временно недоступны</h3>
-                    <p class="text-gray-400">Попробуйте обновить страницу позже</p>
+                    <p class="text-stone-400">Попробуйте обновить страницу позже</p>
                 </div>
             `;
         }
@@ -277,9 +277,9 @@ function renderProductCategory(categoryId, products) {
     if (products.length === 0) {
         container.innerHTML = `
             <div class="text-center py-12">
-                <i class="fas fa-search text-6xl text-gray-700 mb-4"></i>
+                <i class="fas fa-search text-6xl text-stone-700 mb-4"></i>
                 <h3 class="text-2xl font-bold mb-2">Ничего не найдено</h3>
-                <p class="text-gray-400">Попробуйте изменить параметры фильтров</p>
+                <p class="text-stone-400">Попробуйте изменить параметры фильтров</p>
             </div>
         `;
         return;
@@ -299,8 +299,8 @@ function createProductCard(product) {
     const additions = product.additions || [];
 
     return `
-        <div class="bg-card-bg rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-600 transition-all duration-300 hover:shadow-xl group flex flex-col">
-            <div class="h-48 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative overflow-hidden">
+        <div class="bg-card-bg rounded-2xl overflow-hidden border border-stone-800 border-opacity-0 hover:border-stone-600 hover:border-opacity-100 transition-all duration-300 hover:shadow-xl group flex flex-col">
+            <div class="h-48 bg-gradient-to-br from-stone-900 to-stone-800 flex items-center justify-center relative overflow-hidden">
                 <div class="w-32 h-32 rounded-full bg-accent-yellow/10 absolute -top-10 -right-10"></div>
                 <div class="w-24 h-24 rounded-full bg-accent-red/10 absolute -bottom-10 -left-10"></div>
                 <img src="/images/products/${product.preview_link}" alt="${product.name}" class="w-full h-full object-contain p-4">
@@ -308,11 +308,11 @@ function createProductCard(product) {
             <div class="p-5 flex-grow flex flex-col">
                 <div class="mb-3 flex-grow">
                     <h3 class="text-xl font-bold mb-2">${product.name}</h3>
-                    <p class="text-gray-400 text-sm mb-3">${product.description}</p>
+                    <p class="text-stone-400 text-sm mb-3">${product.description}</p>
 
                     <!-- БЖУ -->
                     <div class="mb-3">
-                        <div class="flex justify-between text-xs text-gray-500">
+                        <div class="flex justify-between text-xs text-stone-500">
                             <span>Б: ${characteristics.protein || 0}g</span>
                             <span>Ж: ${characteristics.fat || 0}g</span>
                             <span>У: ${characteristics.carbohydrates || 0}g</span>
@@ -323,10 +323,10 @@ function createProductCard(product) {
                     <!-- Состав -->
                     ${ingredients.length > 0 ? `
                         <div class="mb-3">
-                            <p class="text-xs text-gray-500 mb-1">Состав:</p>
+                            <p class="text-xs text-stone-500 mb-1">Состав:</p>
                             <div class="flex flex-wrap gap-1">
                                 ${ingredients.map(ingredient => `
-                                    <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">${ingredient}</span>
+                                    <span class="text-xs bg-stone-800 text-stone-300 px-2 py-1 rounded-full">${ingredient}</span>
                                 `).join('')}
                             </div>
                         </div>
@@ -335,10 +335,10 @@ function createProductCard(product) {
                     <!-- Дополнительные ингредиенты -->
                     ${additions.length > 0 ? `
                         <div class="mb-3">
-                            <p class="text-xs text-gray-500 mb-1">Дополнительно:</p>
+                            <p class="text-xs text-stone-500 mb-1">Дополнительно:</p>
                             <div class="flex flex-wrap gap-1">
                                 ${additions.map(addition => `
-                                    <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">${addition}</span>
+                                    <span class="text-xs bg-stone-800 text-stone-300 px-2 py-1 rounded-full">${addition}</span>
                                 `).join('')}
                             </div>
                         </div>
@@ -347,7 +347,7 @@ function createProductCard(product) {
                 <div class="flex justify-between items-center mt-auto">
                     <span class="text-accent-yellow font-bold text-lg">${product.cost} Ł</span>
                     <div class="flex space-x-2">
-                        <button class="add-to-favorites w-10 h-10 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-all duration-300" data-product-id="${product.id}" title="Добавить в избранное">
+                        <button class="add-to-favorites w-10 h-10 rounded-full bg-stone-800 hover:bg-stone-700 flex items-center justify-center transition-all duration-300" data-product-id="${product.id}" title="Добавить в избранное">
                             <i class="far fa-heart"></i>
                         </button>
                         <button class="add-to-cart w-10 h-10 rounded-full bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white flex items-center justify-center transition-all duration-300 group" data-product-id="${product.id}">
@@ -371,7 +371,6 @@ function addCartEventListeners() {
             const originalHTML = this.innerHTML;
             this.innerHTML = '<i class="fas fa-plus"></i>';
             this.classList.remove('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
-            this.classList.add('bg-yellow-600');
 
             setTimeout(() => {
                 this.innerHTML = originalHTML;
@@ -403,9 +402,9 @@ async function renderFavoritesTab() {
         if (favorites.length === 0) {
             favoritesContainer.innerHTML = `
                 <div class="text-center py-12">
-                    <i class="far fa-heart text-6xl text-gray-700 mb-4"></i>
+                    <i class="far fa-heart text-6xl text-stone-700 mb-4"></i>
                     <h3 class="text-2xl font-bold mb-2">В избранном пока пусто</h3>
-                    <p class="text-gray-400">Добавляйте товары в избранное, чтобы не потерять</p>
+                    <p class="text-stone-400">Добавляйте товары в избранное, чтобы не потерять</p>
                 </div>
             `;
             return;
@@ -433,9 +432,9 @@ async function renderFavoritesTab() {
         console.error('Ошибка загрузки избранного:', error);
         favoritesContainer.innerHTML = `
             <div class="text-center py-12">
-                <i class="fas fa-exclamation-triangle text-6xl text-gray-700 mb-4"></i>
+                <i class="fas fa-exclamation-triangle text-6xl text-stone-700 mb-4"></i>
                 <h3 class="text-2xl font-bold mb-2">Ошибка загрузки избранного</h3>
-                <p class="text-gray-400">Попробуйте обновить страницу позже</p>
+                <p class="text-stone-400">Попробуйте обновить страницу позже</p>
             </div>
         `;
     }
