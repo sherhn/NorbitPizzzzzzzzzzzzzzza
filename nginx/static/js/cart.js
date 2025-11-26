@@ -1,4 +1,4 @@
- // Скрипт для работы с корзиной
+// Скрипт для работы с корзиной
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initCart, 100);
 });
@@ -362,7 +362,7 @@ function updateCartContent() {
     cartContent.innerHTML = cartHTML;
 }
 
-// Создание HTML для элемента корзины
+// Создание HTML для элемента корзины с превью
 function createCartItemHTML(item) {
     console.log('Создание HTML для товара:', item);
 
@@ -379,30 +379,48 @@ function createCartItemHTML(item) {
     const productName = product.name || 'Неизвестный товар';
     const productCost = product.cost || 0;
     const totalCost = (productCost * quantity).toFixed(6);
+    const previewImage = product.preview_link || 'default_product.png';
 
     return `
         <div class="bg-stone-800/50 rounded-xl p-4 mb-3">
-            <div class="flex justify-between items-start mb-2">
-                <div class="flex-1">
-                    <h4 class="font-semibold text-sm mb-1">${productName}</h4>
-                    <p class="text-xs text-stone-400">${(productCost || 0).toFixed(6)} Ł × ${quantity}</p>
+            <div class="flex items-start space-x-3 mb-3">
+                <!-- Превью продукта -->
+                <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-stone-700 to-stone-800 rounded-lg overflow-hidden flex items-center justify-center">
+                    <img src="/images/products/${previewImage}"
+                         alt="${productName}"
+                         class="w-full h-full object-cover"
+                         onerror="this.src='/images/default_product.png'">
                 </div>
-                <button onclick="removeFromCart(${productId})" class="ml-2 text-stone-400 hover:text-accent-red transition-colors" title="Удалить">
-                    <i class="fas fa-times"></i>
+
+                <!-- Информация о продукте -->
+                <div class="flex-1 min-w-0">
+                    <h4 class="font-semibold text-sm mb-1 truncate">${productName}</h4>
+                    <p class="text-xs text-stone-400">${(productCost || 0).toFixed(6)} Ł × ${quantity}</p>
+                    <p class="text-accent-yellow font-bold text-sm mt-1">${totalCost} Ł</p>
+                </div>
+
+                <!-- Кнопка удаления -->
+                <button onclick="removeFromCart(${productId})"
+                        class="flex-shrink-0 w-6 h-6 rounded-full bg-stone-700 hover:bg-red-600 flex items-center justify-center text-xs transition-colors ml-2"
+                        title="Удалить">
+                    <i class="fas fa-times text-xs"></i>
                 </button>
             </div>
 
-            <div class="flex justify-between items-center">
+            <!-- Управление количеством -->
+            <div class="flex justify-between items-center border-t border-stone-700 pt-3">
                 <div class="flex items-center space-x-2">
-                    <button onclick="decreaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-xs transition-colors">
+                    <button onclick="decreaseQuantity(${productId})"
+                            class="w-8 h-8 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-sm transition-colors">
                         <i class="fas fa-minus"></i>
                     </button>
                     <span class="text-sm font-medium min-w-8 text-center" id="quantity-${productId}">${quantity}</span>
-                    <button onclick="increaseQuantity(${productId})" class="w-6 h-6 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-xs transition-colors">
+                    <button onclick="increaseQuantity(${productId})"
+                            class="w-8 h-8 rounded-full bg-stone-700 hover:bg-stone-600 flex items-center justify-center text-sm transition-colors">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
-                <span class="text-accent-yellow font-bold" id="total-${productId}">${totalCost} Ł</span>
+                <span class="text-accent-yellow font-bold text-sm" id="total-${productId}">${totalCost} Ł</span>
             </div>
         </div>
     `;
