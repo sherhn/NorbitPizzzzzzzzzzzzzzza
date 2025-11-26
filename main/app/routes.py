@@ -1,7 +1,9 @@
 """Основные маршруты."""
 
 from flask import Blueprint, request, jsonify, current_app, Response, session
+from .cache import get_redis_connection, get_cached_products, cache_products
 from .models import MenuPosition, FavoritesProducts, db
+import json
 
 bp = Blueprint('main', __name__)
 
@@ -10,15 +12,29 @@ bp = Blueprint('main', __name__)
 def get_products():
     """Получение всех позиций из базы данных."""
     try:
-        # Получаем все продукты из базы данных
+        # Пробуем получить из кэша
+        cached_products = get_cached_products()
+        if cached_products:
+            current_app.logger.info("Returning products from cache")
+            return jsonify({
+                'products': cached_products,
+                'count': len(cached_products),
+                'cached': True
+            }), 200
+
+        # Если нет в кэше - идем в БД
         products = MenuPosition.query.all()
 
         # Преобразуем в список словарей
         products_data = [product.to_dict() for product in products]
 
+        # Кэшируем результат
+        cache_products(products_data)
+
         return jsonify({
             'products': products_data,
-            'count': len(products_data)
+            'count': len(products_data),
+            'cached': False
         }), 200
 
     except Exception as e:
@@ -30,15 +46,31 @@ def get_products():
 def get_product(product_id):
     """Получение продукта по ID."""
     try:
-        # Ищем продукт по ID
+        # Для отдельных продуктов тоже можно кэшировать
+        cache_key = f"cache:product:{product_id}"
+        redis_conn = get_redis_connection()
+        cached = redis_conn.get(cache_key)
+
+        if cached:
+            return jsonify({
+                'product': json.loads(cached),
+                'cached': True
+            }), 200
+
         product = MenuPosition.query.get(product_id)
 
         if not product:
             return jsonify({'error': 'Product not found'}), 404
 
-        # Возвращаем все поля продукта
+        product_data = product.to_dict()
+
+        # Кэшируем отдельный продукт
+        redis_conn.setex(cache_key, current_app.config['PRODUCTS_CACHE_TTL'],
+                         json.dumps(product_data))
+
         return jsonify({
-            'product': product.to_dict()
+            'product': product_data,
+            'cached': False
         }), 200
 
     except Exception as e:
