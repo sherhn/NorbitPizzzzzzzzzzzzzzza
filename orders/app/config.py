@@ -16,3 +16,6 @@ class Config:
     
     # Redis конфигурация
     REDIS_URL = os.environ.get('REDIS_URL')
+
+    # TTL корзины в секундах (48 часов по умолчанию)
+    CART_TTL_SECONDS = int(os.environ.get('CART_TTL_SECONDS', 172800))

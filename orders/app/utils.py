@@ -17,20 +17,27 @@ def get_cart_key():
     return "cart:default_user"
 
 
+def update_cart_ttl(cart_key):
+    """Обновить TTL корзины."""
+    redis_conn = get_redis_connection()
+    ttl_seconds = current_app.config.get('CART_TTL_SECONDS', 172800)  # 48 часов по умолчанию
+    redis_conn.expire(cart_key, ttl_seconds)
+
+
 def add_to_cart(product_id, product_info):
     """Добавить товар в корзину или увеличить количество на 1 если уже есть."""
     redis_conn = get_redis_connection()
     cart_key = get_cart_key()
-    
+
     # Проверяем, есть ли уже товар в корзине
     existing_item_json = redis_conn.hget(cart_key, product_id)
-    
+
     if existing_item_json:
         # Товар уже есть - увеличиваем количество на 1
         existing_item = json.loads(existing_item_json)
         existing_item['quantity'] += 1
         redis_conn.hset(cart_key, product_id, json.dumps(existing_item))
-        return 'incremented'
+        result = 'incremented'
     else:
         # Товара нет - добавляем новый с количеством 1
         cart_item = {
@@ -39,15 +46,24 @@ def add_to_cart(product_id, product_info):
             'product_info': product_info
         }
         redis_conn.hset(cart_key, product_id, json.dumps(cart_item))
-        return 'added'
+        result = 'added'
+
+    # Обновляем TTL при любом изменении корзины
+    update_cart_ttl(cart_key)
+    return result
 
 
 def remove_from_cart(product_id):
     """Удалить товар из корзины (полностью)."""
     redis_conn = get_redis_connection()
     cart_key = get_cart_key()
-    
+
     result = redis_conn.hdel(cart_key, product_id)
+
+    # Если в корзине еще остались товары, обновляем TTL
+    if redis_conn.hlen(cart_key) > 0:
+        update_cart_ttl(cart_key)
+
     return result > 0
 
 
@@ -68,11 +84,17 @@ def decrement_from_cart(product_id):
         # Уменьшаем количество на 1
         existing_item['quantity'] -= 1
         redis_conn.hset(cart_key, product_id, json.dumps(existing_item))
-        return 'decremented'
+        result = 'decremented'
     else:
         # Если количество было 1 - удаляем товар из корзины
         redis_conn.hdel(cart_key, product_id)
-        return 'removed'
+        result = 'removed'
+
+    # Обновляем TTL при любом изменении корзины
+    if redis_conn.hlen(cart_key) > 0:
+        update_cart_ttl(cart_key)
+
+    return result
 
 
 def get_cart():
