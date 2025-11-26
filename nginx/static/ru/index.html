@@ -1,10 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaMania - Современная пиццерия</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#000000',
+                        'accent-red': '#e11d48',
+                        'accent-yellow': '#fbbf24',
+                        'dark-bg': '#0f0f0f',
+                        'card-bg': '#1a1a1a'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-primary text-white font-sans">
+    <!-- Хидер -->
+    <header class="sticky top-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-gray-800">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Логотип -->
+            <div class="flex items-center space-x-3">
+                <img src="" alt="NorbitPizza" class="w-10 h-10 rounded-full">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-yellow to-accent-red bg-clip-text text-transparent">NorbitPizza</h1>
+            </div>
 
+            <!-- Выпадающие списки -->
+            <div class="flex space-x-4">
+                <!-- Выбор города -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl border border-gray-800 hover:border-gray-600 transition-all">
+                        <i class="fas fa-map-marker-alt text-accent-yellow"></i>
+                        <span>Москва</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg border border-gray-800 rounded-xl shadow-lg z-10">
+                        <ul class="py-2">
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Курск</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Чебоксары</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Диксон</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Выбор языка -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-1 bg-card-bg px-4 py-2 rounded-xl border border-gray-800 hover:border-gray-600 transition-all">
+                        <i class="fas fa-globe text-accent-yellow"></i>
+                        <span>Русский</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg border border-gray-800 rounded-xl shadow-lg z-10">
+                        <ul class="py-2">
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">English</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Español</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Приветственная секция -->
+        <section class="text-center mb-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-dark-bg to-primary p-8 md:p-12 border border-gray-800">
+            <div class="max-w-3xl mx-auto relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Наслаждайтесь искусством пиццы</h2>
+                <p class="text-xl mb-8 text-gray-300">Современные рецепты, традиционный вкус. Только свежие ингредиенты и море страсти в каждой пицце.</p>
+                <button id="menu-button" class="bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Исследовать меню
+                </button>
+            </div>
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-accent-yellow/10 blur-3xl"></div>
+            <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-accent-red/10 blur-3xl"></div>
+        </section>
+
+        <!-- Фильтры -->
+        <section class="mb-12">
+            <div class="flex justify-center">
+                <button class="flex items-center space-x-2 bg-card-bg border border-gray-800 text-white px-6 py-3 rounded-2xl hover:border-gray-600 transition-all duration-300 group">
+                    <i class="fas fa-sliders-h text-accent-yellow group-hover:rotate-90 transition-transform"></i>
+                    <span>Фильтры и сортировка</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Меню -->
+        <section>
+            <!-- Вкладки меню -->
+            <div class="flex justify-center mb-10">
+                <div class="inline-flex bg-card-bg p-2 rounded-2xl border border-gray-800">
+                    <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="recent">
+                        <i class="fas fa-history mr-2"></i>Недавние
+                    </button>
+                    <button class="menu-tab px-5 py-3 rounded-xl bg-gradient-to-r from-accent-red to-red-700 transition-all active" data-tab="pizzas">
+                        <i class="fas fa-pizza-slice mr-2"></i>Пиццы
+                    </button>
+                    <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="snacks">
+                        <i class="fas fa-utensils mr-2"></i>Закуски
+                    </button>
+                    <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="drinks">
+                        <i class="fas fa-wine-glass-alt mr-2"></i>Напитки
+                    </button>
+                    <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="favorites">
+                        <i class="fas fa-heart mr-2"></i>Избранное
+                    </button>
+                </div>
+            </div>
+
+            <!-- Контент вкладок -->
+            <div id="menu-content">
+                <!-- Вкладка Пиццы (активная по умолчанию) -->
+                <div id="pizzas" class="menu-tab-content active">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Карточка пиццы -->
+                        <div class="bg-card-bg rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-600 transition-all duration-300 hover:shadow-xl group flex flex-col">
+                            <div class="h-48 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative overflow-hidden">
+                                <div class="w-32 h-32 rounded-full bg-accent-yellow/10 absolute -top-10 -right-10"></div>
+                                <div class="w-24 h-24 rounded-full bg-accent-red/10 absolute -bottom-10 -left-10"></div>
+                                <i class="fas fa-pizza-slice text-6xl text-gray-700 group-hover:text-gray-600 transition-colors"></i>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col">
+                                <div class="mb-3 flex-grow">
+                                    <h3 class="text-xl font-bold mb-2">Маргарита</h3>
+                                    <p class="text-gray-400 text-sm">Классическая итальянская пицца с томатным соусом, моцареллой и свежим базиликом.</p>
+                                </div>
+                                <div class="flex justify-between items-center mt-auto">
+                                    <span class="text-accent-yellow font-bold text-lg">0 Ł</span>
+                                    <button class="add-to-cart w-12 h-12 rounded-full bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white flex items-center justify-center transition-all duration-300 group">
+                                        <i class="fas fa-shopping-basket group-hover:scale-110 transition-transform"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Остальные вкладки (скрыты по умолчанию) -->
+                <div id="recent" class="menu-tab-content hidden">
+                    <div class="text-center py-12">
+                        <i class="fas fa-history text-6xl text-gray-700 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">История заказов пуста</h3>
+                        <p class="text-gray-400">Здесь будут отображаться ваши недавние заказы</p>
+                    </div>
+                </div>
+
+                <div id="snacks" class="menu-tab-content hidden">
+                    <div class="text-center py-12">
+                        <i class="fas fa-utensils text-6xl text-gray-700 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">Скоро в меню</h3>
+                        <p class="text-gray-400">Мы готовим для вас вкуснейшие закуски</p>
+                    </div>
+                </div>
+
+                <div id="drinks" class="menu-tab-content hidden">
+                    <div class="text-center py-12">
+                        <i class="fas fa-wine-glass-alt text-6xl text-gray-700 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">Скоро в меню</h3>
+                        <p class="text-gray-400">Мы готовим для вас освежающие напитки</p>
+                    </div>
+                </div>
+
+                <div id="favorites" class="menu-tab-content hidden">
+                    <div class="text-center py-12">
+                        <i class="fas fa-heart text-6xl text-gray-700 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">Добавьте в избранное</h3>
+                        <p class="text-gray-400">Отмечайте понравившиеся блюда сердечком</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark-bg border-t border-gray-800 mt-16 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="" alt="NorbitPizza" class="w-8 h-8 rounded-full">
+                        <h2 class="text-xl font-bold bg-gradient-to-r from-accent-yellow to-accent-red bg-clip-text text-transparent">NorbitPizza</h2>
+                    </div>
+                    <a class="text-gray-400 text-sm" href="https://youtu.be/dQw4w9WgXcQ?si=4evCqh7-n1Ja4hzE">© 2025 Все права защищены, ага прям так и защищены, лучше нажмите сюда, чем читать</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
