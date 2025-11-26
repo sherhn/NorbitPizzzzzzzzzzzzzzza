@@ -51,6 +51,30 @@ def remove_from_cart(product_id):
     return result > 0
 
 
+def decrement_from_cart(product_id):
+    """Уменьшить количество товара в корзине на 1 или удалить если количество станет 0."""
+    redis_conn = get_redis_connection()
+    cart_key = get_cart_key()
+
+    # Проверяем, есть ли товар в корзине
+    existing_item_json = redis_conn.hget(cart_key, product_id)
+
+    if not existing_item_json:
+        return 'not_found'
+
+    existing_item = json.loads(existing_item_json)
+
+    if existing_item['quantity'] > 1:
+        # Уменьшаем количество на 1
+        existing_item['quantity'] -= 1
+        redis_conn.hset(cart_key, product_id, json.dumps(existing_item))
+        return 'decremented'
+    else:
+        # Если количество было 1 - удаляем товар из корзины
+        redis_conn.hdel(cart_key, product_id)
+        return 'removed'
+
+
 def get_cart():
     """Получить всю корзину."""
     redis_conn = get_redis_connection()

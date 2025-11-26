@@ -4,8 +4,7 @@ from flask import Blueprint, request, jsonify, current_app, Response, session
 from .models import db, UserOrders
 from datetime import datetime
 import requests
-from .utils import add_to_cart, remove_from_cart, get_cart, clear_cart, get_cart_total
-
+from .utils import add_to_cart, remove_from_cart, get_cart, clear_cart, get_cart_total, decrement_from_cart
 
 bp = Blueprint('orders', __name__)
 
@@ -56,6 +55,26 @@ def remove_from_cart_route(product_id):
 
     except Exception as e:
         current_app.logger.error(f"Unexpected error in remove_from_cart_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/cart/<int:product_id>/decrement', methods=['POST'])
+def decrement_from_cart_route(product_id):
+    """Уменьшить количество товара в корзине на 1 или удалить если количество станет 0."""
+    try:
+        result = decrement_from_cart(product_id)
+
+        if result == 'not_found':
+            return jsonify({'error': 'Product not found in cart'}), 404
+        elif result == 'decremented':
+            return jsonify({'success': 'Product quantity decreased in cart'}), 200
+        elif result == 'removed':
+            return jsonify({'success': 'Product removed from cart (quantity was 1)'}), 200
+        else:
+            return jsonify({'error': 'Unexpected result'}), 500
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in decrement_from_cart_route: {e}", exc_info=True)
         return jsonify({'error': 'Internal server error'}), 500
 
 
