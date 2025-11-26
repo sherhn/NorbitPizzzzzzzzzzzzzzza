@@ -88,22 +88,37 @@
 
 **Успех (200 OK):**
 ```json
-{
-  "cart": [
+[
     {
-      "product_id": 123,
-      "quantity": 2,
-      "product_info": {
-        "id": 123,
-        "name": "Пепперони",
-        "cost": 19.99,
-        "description": "Пицца с пепперони"
-      }
+        "id": 1,
+        "product_id": 1,
+        "product_info": {
+            "additions": [
+                "сырный бортик",
+                "острый перец",
+                "чесночный соус"
+            ],
+            "characteristics": {
+                "calories": 250,
+                "carbohydrates": 35,
+                "fat": 8,
+                "protein": 12
+            },
+            "cost": 0.067683,
+            "description": "Моцарелла, сыры чеддер и пармезан, фирменный соус альфредо",
+            "id": 1,
+            "ingredients": [
+                "фирменный соус альфредо",
+                "моцарелла",
+                "сыры чеддер",
+                "пармезан"
+            ],
+            "name": "Сырная",
+            "preview_link": "/cheese.avif",
+            "type": "pizza"
+        }
     }
-  ],
-  "total": 39.98,
-  "count": 1
-}
+]
 ```
 
 **Ошибки:**
