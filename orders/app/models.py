@@ -36,3 +36,18 @@ class UserOrders(db.Model):
             "address": self.address,
             "paid": self.paid
         }
+
+
+class FavoritesProducts(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, nullable=False)
+    product_info = db.Column(JSONB, nullable=False)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Преобразование в словарь."""
+        return {
+            "id": self.id,
+            "product_id": self.product_id,
+            "product_info": self.product_info
+        }
