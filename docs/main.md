@@ -254,3 +254,5 @@ OK
 - `MAIN_POSTGRES_PASSWORD` - пароль PostgreSQL  
 - `MAIN_POSTGRES_DB` - имя базы данных
 - `MAIN_DATABASE_URL` - хост базы данных
+- `CACHE_REDIS_URL` - БД для кэширования продуктов
+- `PRODUCTS_CACHE_TTL` - время жизни кэша

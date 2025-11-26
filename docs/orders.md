@@ -253,3 +253,4 @@ OK
 - `ORDERS_DATABASE_URL` - хост базы данных
 - `REDIS_URL` - БД для корзины
 - `MAIN_SERVICE_URI` - хост основного сервиса
+- `CART_TTL_SECONDS` - время жизни корзины
