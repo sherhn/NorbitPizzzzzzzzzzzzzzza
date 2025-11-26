@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const languageDropdown = document.querySelectorAll('.group')[1].querySelector('.absolute');
     const languageItems = document.querySelectorAll('.group:nth-child(2) li');
 
-    // Показываем/скрываем dropdown при клике на кнопку
+    // Показываем/скрываем список при клике на кнопку
     languageButton.addEventListener('click', function(event) {
         event.stopPropagation();
         languageDropdown.classList.toggle('hidden');
@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Закрываем dropdown при клике в любом месте страницы
+    // Закрываем список при клике в любом месте страницы
     document.addEventListener('click', function() {
         languageDropdown.classList.add('hidden');
     });
 
-    // Предотвращаем закрытие при клике внутри dropdown
+    // Делаем так, чтобы не было закрытия при клике внутри списка
     languageDropdown.addEventListener('click', function(event) {
         event.stopPropagation();
     });

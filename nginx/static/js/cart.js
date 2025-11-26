@@ -113,7 +113,6 @@ async function addToCart(productId, button = null) {
         // Визуальная обратная связь
         const originalHTML = button.innerHTML;
         button.innerHTML = '<i class="fas fa-plus"></i>';
-        button.classList.remove('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
     }
 
     try {
@@ -155,7 +154,6 @@ async function addToCart(productId, button = null) {
             setTimeout(() => {
                 button.disabled = false;
                 button.innerHTML = '<i class="fas fa-shopping-basket"></i>';
-                button.classList.add('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
             }, 1000);
         }
     }

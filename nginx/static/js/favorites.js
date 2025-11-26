@@ -103,7 +103,7 @@ async function addToFavorites(productId) {
     }
 }
 
-// Добавление в favorites.js
+// Добавление в favorites
 function updateFavoritesTab() {
     const favoritesTab = document.getElementById('favorites');
     if (!favoritesTab) return;
@@ -114,7 +114,7 @@ function updateFavoritesTab() {
     }
 }
 
-// Обновление функции removeFromFavorites
+// Обновление функции удаления из избранных
 async function removeFromFavorites(productId) {
     try {
         const response = await fetch('http://localhost/api/main/favorite', {
@@ -138,7 +138,9 @@ async function removeFromFavorites(productId) {
 
         // Обновляем отображение
         updateFavoriteButtons();
-        updateFavoritesTab(); // Обновляем вкладку избранного
+
+        // Обновляем вкладку избранного
+        updateFavoritesTab(); 
         renderFavoritesPage();
 
         showFavoriteNotification('Товар удален из избранного', 'success');
@@ -289,7 +291,7 @@ function showFavoriteNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Показать состояние ошибки избранного
+// Показать состояние ошибки в израбнном
 function showFavoriteError() {
     const favoritesContainer = document.getElementById('favorites-container');
     if (favoritesContainer) {
@@ -306,12 +308,12 @@ function showFavoriteError() {
     }
 }
 
-// Проверка, находится ли товар в избранном
+// Проверяем, находится ли товар в избранном
 function isProductFavorite(productId) {
     return favoriteProducts.some(product => product.id == productId);
 }
 
-// Получить количество избранных товаров
+// Получаем количество избранных товаров
 function getFavoritesCount() {
     return favoriteProducts.length;
 }

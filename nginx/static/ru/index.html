@@ -2,13 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Marck+Script&display=swap" rel="stylesheet">
     <script src="/js/cities.js"></script>
     <script src="/js/languages.js"></script>
     <script src="/js/menu.js"></script>
     <script src="/js/favorites.js"></script>
     <script src="/js/cart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PizzaMania - Современная пиццерия</title>
+    <link rel="icon" type="image/png" href="/images/dark_logo.png" sizes="96x96">
+    <title>NorbitPizza</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -21,13 +24,17 @@
                         'accent-yellow': '#fbbf24',
                         'dark-bg': '#0f0f0f',
                         'card-bg': '#1a1a1a'
+                    },
+                    fontFamily: {
+                        'sans': ['Montserrat', 'system-ui', 'sans-serif'],
+                        'italian': ['Marck Script', 'cursive']
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-primary text-white font-sans">
+<body class="bg-primary text-white font-sans" style="font-family: 'Montserrat', sans-serif;">
     <!-- Хидер -->
     <header class="sticky top-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-stone-800 border-opacity-70">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -79,7 +86,7 @@
         <!-- Приветственная секция -->
         <section class="text-center mb-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-dark-bg to-primary p-8 md:p-12 border border-stone-900 border-opacity-20">
             <div class="max-w-3xl mx-auto relative z-10">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Наслаждайтесь искусством пиццы</h2>
+                <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-yellow-400 font-italian">Наслаждайтесь искусством пиццы</h2>
                 <p class="text-xl mb-8 text-stone-300">Современные рецепты, традиционный вкус. Только свежие ингредиенты и море страсти в каждой пицце.</p>
                 <button id="menu-button" class="bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Исследовать меню
@@ -131,7 +138,7 @@
                     <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="recent">
                         <i class="fas fa-history mr-2"></i>Недавние
                     </button>
-                    <button class="menu-tab px-5 py-3 rounded-xl bg-gradient-to-r from-accent-red to-red-700 transition-all active" data-tab="pizzas">
+                    <button class="menu-tab px-5 py-3 rounded-xl bg-gradient-to-r font-bold from-accent-red to-red-700 transition-all active" data-tab="pizzas">
                         <i class="fas fa-pizza-slice mr-2"></i>Пиццы
                     </button>
                     <button class="menu-tab px-5 py-3 rounded-xl transition-all" data-tab="snacks">

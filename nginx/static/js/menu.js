@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Убираем активный класс у всех вкладок
             menuTabs.forEach(t => {
-                t.classList.remove('active', 'bg-gradient-to-r', 'from-accent-red', 'to-red-700');
+                t.classList.remove('active', 'font-bold', 'bg-gradient-to-r', 'from-accent-red', 'to-red-700');
             });
 
             // Добавляем активный класс текущей вкладке
-            this.classList.add('active', 'bg-gradient-to-r', 'from-accent-red', 'to-red-700');
+            this.classList.add('active', 'font-bold', 'bg-gradient-to-r', 'from-accent-red', 'to-red-700');
 
             // Скрываем все контенты
             menuContents.forEach(content => {
@@ -370,12 +370,9 @@ function addCartEventListeners() {
             // Визуальная обратная связь
             const originalHTML = this.innerHTML;
             this.innerHTML = '<i class="fas fa-plus"></i>';
-            this.classList.remove('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
 
             setTimeout(() => {
                 this.innerHTML = originalHTML;
-                this.classList.remove('bg-green-600');
-                this.classList.add('bg-gradient-to-r', 'from-accent-red', 'to-red-700', 'hover:from-red-700', 'hover:to-accent-red');
             }, 1000);
 
             // Добавляем в корзину
