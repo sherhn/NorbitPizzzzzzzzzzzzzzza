@@ -1,4 +1,4 @@
-// Переключение вкладок меню
+ // Переключение вкладок меню
 document.addEventListener('DOMContentLoaded', function() {
     const menuTabs = document.querySelectorAll('.menu-tab');
     const menuContents = document.querySelectorAll('.menu-tab-content');

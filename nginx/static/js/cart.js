@@ -1,4 +1,4 @@
-// Скрипт для работы с корзиной
+ // Скрипт для работы с корзиной
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initCart, 100);
 });
