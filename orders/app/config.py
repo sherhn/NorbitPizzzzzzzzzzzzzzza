@@ -13,3 +13,6 @@ class Config:
 
     # Ссылка на main микросервис
     MAIN_SERVICE_URI = os.environ.get('MAIN_SERVICE_URI')
+    
+    # Redis конфигурация
+    REDIS_URL = os.environ.get('REDIS_URL')
