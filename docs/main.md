@@ -22,7 +22,7 @@
 
 ## API Endpoints
 
-### 1. Получение всех продуктов
+### 1.1 Получение всех продуктов
 
 **Endpoint:** `GET /api/main/get_products`
 
@@ -58,7 +58,7 @@
 **Ошибки:**
 - `500 Internal Server Error` - внутренняя ошибка сервера
 
-### 2. Получение продукта по ID
+### 1.2 Получение продукта по ID
 
 **Endpoint:** `GET /api/main/get_product/<int:product_id>`
 
@@ -92,7 +92,7 @@
 }
 ```
 
-### 3. Добавление товара в избранное
+### 2.1. Добавление товара в избранное
 
 **Endpoint:** `POST /api/orders/favorite`
 
@@ -131,7 +131,7 @@
 - `404 Not Found` - товар не существует
 - `500 Internal Server Error` - внутренняя ошибка сервера
 
-### 4. Удаление товара из избранного
+### 2.2. Удаление товара из избранного
 
 **Endpoint:** `DELETE /api/orders/favorite`
 
@@ -163,7 +163,7 @@
 - `404 Not Found` - товар не найден в избранном
 - `500 Internal Server Error` - внутренняя ошибка сервера
 
-### 5. Получение списка избранных товаров
+### 2.3. Получение списка избранных товаров
 
 **Endpoint:** `GET /api/orders/get_favorites`
 
@@ -210,7 +210,7 @@
 - `404 Not Found` - продукт не найден
 - `500 Internal Server Error` - внутренняя ошибка сервера
 
-### 6. Health Check
+### 3. Health Check
 
 **Endpoint:** `GET /api/main/health`
 
