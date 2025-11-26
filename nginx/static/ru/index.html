@@ -2,6 +2,11 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/cities.js"></script>
+    <script src="/js/languages.js"></script>
+    <script src="/js/menu.js"></script>
+    <script src="/js/favorites.js"></script>
+    <script src="/js/cart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PizzaMania - Современная пиццерия</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -28,7 +33,7 @@
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <!-- Логотип -->
             <div class="flex items-center space-x-3">
-                <img src="" alt="NorbitPizza" class="w-10 h-10 rounded-full">
+                <img src="/images/logo.png" alt="NorbitPizza" class="w-10 h-10 rounded-full">
                 <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-yellow to-accent-red bg-clip-text text-transparent">NorbitPizza</h1>
             </div>
 
@@ -45,7 +50,7 @@
                         <ul class="py-2">
                             <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Курск</li>
                             <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Чебоксары</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Диксон</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Москва</li>
                         </ul>
                     </div>
                 </div>
@@ -60,7 +65,8 @@
                     <div class="absolute hidden group-hover:block w-full mt-1 bg-card-bg border border-gray-800 rounded-xl shadow-lg z-10">
                         <ul class="py-2">
                             <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">English</li>
-                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Español</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Русский</li>
+                            <li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">Italiano</li>
                         </ul>
                     </div>
                 </div>
@@ -86,10 +92,34 @@
         <!-- Фильтры -->
         <section class="mb-12">
             <div class="flex justify-center">
-                <button class="flex items-center space-x-2 bg-card-bg border border-gray-800 text-white px-6 py-3 rounded-2xl hover:border-gray-600 transition-all duration-300 group">
+                <button id="filters-toggle" class="flex items-center space-x-2 bg-card-bg border border-gray-800 text-white px-6 py-3 rounded-2xl hover:border-gray-600 transition-all duration-300 group">
                     <i class="fas fa-sliders-h text-accent-yellow group-hover:rotate-90 transition-transform"></i>
-                    <span>Фильтры и сортировка</span>
+                    <span>Фильтры по ингредиентам</span>
                 </button>
+            </div>
+
+            <!-- Панель фильтров -->
+            <div id="filters-panel" class="hidden mt-6 bg-card-bg border border-gray-800 rounded-2xl p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Фильтр по ингредиентам -->
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <h3 class="text-lg font-bold mb-3 text-accent-yellow">Выберите ингредиенты</h3>
+                        <p class="text-sm text-gray-400 mb-4">Показываются все пиццы, содержащие выбранные ингредиенты</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-60 overflow-y-auto p-2">
+                            <!-- Ингредиенты будут добавляться динамически -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопки управления фильтрами -->
+                <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-800">
+                    <button id="reset-filters" class="px-4 py-2 border border-gray-600 text-gray-300 rounded-xl hover:border-gray-400 transition-all">
+                        Сбросить фильтры
+                    </button>
+                    <button id="apply-filters" class="px-4 py-2 bg-gradient-to-r from-accent-red to-red-700 text-white rounded-xl hover:from-red-700 hover:to-accent-red transition-all">
+                        Применить фильтры
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -120,31 +150,13 @@
             <div id="menu-content">
                 <!-- Вкладка Пиццы (активная по умолчанию) -->
                 <div id="pizzas" class="menu-tab-content active">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <!-- Карточка пиццы -->
-                        <div class="bg-card-bg rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-600 transition-all duration-300 hover:shadow-xl group flex flex-col">
-                            <div class="h-48 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative overflow-hidden">
-                                <div class="w-32 h-32 rounded-full bg-accent-yellow/10 absolute -top-10 -right-10"></div>
-                                <div class="w-24 h-24 rounded-full bg-accent-red/10 absolute -bottom-10 -left-10"></div>
-                                <i class="fas fa-pizza-slice text-6xl text-gray-700 group-hover:text-gray-600 transition-colors"></i>
-                            </div>
-                            <div class="p-5 flex-grow flex flex-col">
-                                <div class="mb-3 flex-grow">
-                                    <h3 class="text-xl font-bold mb-2">Маргарита</h3>
-                                    <p class="text-gray-400 text-sm">Классическая итальянская пицца с томатным соусом, моцареллой и свежим базиликом.</p>
-                                </div>
-                                <div class="flex justify-between items-center mt-auto">
-                                    <span class="text-accent-yellow font-bold text-lg">0 Ł</span>
-                                    <button class="add-to-cart w-12 h-12 rounded-full bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white flex items-center justify-center transition-all duration-300 group">
-                                        <i class="fas fa-shopping-basket group-hover:scale-110 transition-transform"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="text-center py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
+                        <p class="text-gray-400 mt-2">Загрузка пицц...</p>
                     </div>
                 </div>
 
-                <!-- Остальные вкладки (скрыты по умолчанию) -->
+                <!-- Остальные вкладки -->
                 <div id="recent" class="menu-tab-content hidden">
                     <div class="text-center py-12">
                         <i class="fas fa-history text-6xl text-gray-700 mb-4"></i>
@@ -154,18 +166,16 @@
                 </div>
 
                 <div id="snacks" class="menu-tab-content hidden">
-                    <div class="text-center py-12">
-                        <i class="fas fa-utensils text-6xl text-gray-700 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">Скоро в меню</h3>
-                        <p class="text-gray-400">Мы готовим для вас вкуснейшие закуски</p>
+                    <div class="text-center py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
+                        <p class="text-gray-400 mt-2">Загрузка закусок...</p>
                     </div>
                 </div>
 
                 <div id="drinks" class="menu-tab-content hidden">
-                    <div class="text-center py-12">
-                        <i class="fas fa-wine-glass-alt text-6xl text-gray-700 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">Скоро в меню</h3>
-                        <p class="text-gray-400">Мы готовим для вас освежающие напитки</p>
+                    <div class="text-center py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl text-accent-yellow"></i>
+                        <p class="text-gray-400 mt-2">Загрузка напитков...</p>
                     </div>
                 </div>
 
@@ -186,7 +196,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
                     <div class="flex items-center space-x-2 mb-4">
-                        <img src="" alt="NorbitPizza" class="w-8 h-8 rounded-full">
+                        <img src="/images/logo.png" alt="NorbitPizza" class="w-8 h-8 rounded-full">
                         <h2 class="text-xl font-bold bg-gradient-to-r from-accent-yellow to-accent-red bg-clip-text text-transparent">NorbitPizza</h2>
                     </div>
                     <a class="text-gray-400 text-sm" href="https://youtu.be/dQw4w9WgXcQ?si=4evCqh7-n1Ja4hzE">© 2025 Все права защищены, ага прям так и защищены, лучше нажмите сюда, чем читать</a>
@@ -194,5 +204,48 @@
             </div>
         </div>
     </footer>
+    <!-- Добавь этот код в index.html перед закрывающим тегом </body> -->
+    <div id="cart-button" class="fixed bottom-6 right-6 z-50">
+        <button class="w-16 h-16 rounded-full bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white flex items-center justify-center shadow-2xl transition-all duration-300 transform hover:scale-110 group">
+            <i class="fas fa-shopping-basket text-xl"></i>
+            <span id="cart-count" class="absolute -top-2 -right-2 bg-accent-yellow text-primary text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center hidden">0</span>
+        </button>
+    </div>
+
+    <!-- Модальное окно корзины -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-96 bg-card-bg border-l border-gray-800 shadow-2xl transform transition-transform duration-300">
+            <div class="p-6 h-full flex flex-col">
+                <!-- Заголовок -->
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Корзина</h3>
+                    <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Содержимое корзины -->
+                <div id="cart-content" class="flex-grow overflow-y-auto">
+                    <div class="text-center py-12">
+                        <i class="fas fa-shopping-basket text-6xl text-gray-700 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Корзина пуста</h3>
+                        <p class="text-gray-400">Добавьте товары из меню</p>
+                    </div>
+                </div>
+
+                <!-- Итог и кнопка заказа -->
+                <div class="border-t border-gray-800 pt-4 mt-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-lg font-semibold">Итого:</span>
+                        <span id="cart-total" class="text-accent-yellow font-bold text-xl">0 Ł</span>
+                    </div>
+                    <button id="checkout-button" onclick="checkout()" class="w-full bg-gradient-to-r from-accent-red to-red-700 hover:from-red-700 hover:to-accent-red text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Оформить заказ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
