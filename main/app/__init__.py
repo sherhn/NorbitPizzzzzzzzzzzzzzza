@@ -17,6 +17,14 @@ def create_app() -> Flask:
     # Инициализация БД
     db.init_app(app)
 
+    # Создание таблиц в контексте приложения
+    with app.app_context():
+        try:
+            db.create_all()
+            app.logger.info("Database tables created/verified")
+        except Exception as e:
+            app.logger.warning(f"Tables already exist or error: {e}", exc_info=True)
+
     # Настройка логирования
     setup_logging()
     logger = logging.getLogger(__name__)

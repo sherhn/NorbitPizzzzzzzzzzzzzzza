@@ -5,7 +5,6 @@
 from typing import Any, Dict
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSONB
-from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -37,4 +36,22 @@ class MenuPosition(db.Model):
             "characteristics": self.characteristics,
             "ingredients": self.ingredients,
             "additions": self.additions
+        }
+
+
+class FavoritesProducts(db.Model):
+    """Модель для хранения избранных продуктов."""
+
+    __tablename__ = 'favorites_products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, nullable=False)
+    product_info = db.Column(JSONB, nullable=False)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Преобразование в словарь."""
+        return {
+            "id": self.id,
+            "product_id": self.product_id,
+            "product_info": self.product_info
         }
