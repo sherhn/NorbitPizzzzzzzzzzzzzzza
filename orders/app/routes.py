@@ -4,13 +4,94 @@ from flask import Blueprint, request, jsonify, current_app, Response, session
 from .models import db, UserOrders, FavoritesProducts
 from datetime import datetime
 import requests
+from .utils import add_to_cart, remove_from_cart, get_cart, clear_cart, get_cart_total
 
 
 bp = Blueprint('orders', __name__)
 
 
+@bp.route('/cart', methods=['POST'])
+def add_to_cart_route():
+    """Добавить товар в корзину или увеличить количество на 1 если уже есть."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'JSON data required'}), 400
+
+        product_id = data.get('product_id')
+
+        if not product_id:
+            return jsonify({'error': 'Product ID is required'}), 400
+
+        # Получаем информацию о продукте из main сервиса
+        response = requests.get(f'{current_app.config.get("MAIN_SERVICE_URI")}/get_product/{product_id}')
+
+        if response.status_code == 404:
+            return jsonify({'error': 'Product does not exist'}), 404
+
+        if response.status_code == 200:
+            product_info = response.json()['product']
+
+            # Добавляем в корзину (увеличиваем количество если уже есть)
+            result = add_to_cart(product_id, product_info)
+
+            if result == 'added':
+                return jsonify({'success': 'Product added to cart'}), 200
+            else:
+                return jsonify({'success': 'Product quantity increased in cart'}), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in add_to_cart_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/cart/<int:product_id>', methods=['DELETE'])
+def remove_from_cart_route(product_id):
+    """Удалить товар из корзины (полностью)."""
+    try:
+        if remove_from_cart(product_id):
+            return jsonify({'success': 'Product removed from cart'}), 200
+        else:
+            return jsonify({'error': 'Product not found in cart'}), 404
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in remove_from_cart_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/cart', methods=['GET'])
+def get_cart_route():
+    """Получить содержимое корзины."""
+    try:
+        cart_items = get_cart()
+        total = get_cart_total()
+
+        return jsonify({
+            'cart': cart_items,
+            'total': total,
+            'count': len(cart_items)
+        }), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in get_cart_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/cart', methods=['DELETE'])
+def clear_cart_route():
+    """Очистить корзину."""
+    try:
+        clear_cart()
+        return jsonify({'success': 'Cart cleared'}), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in clear_cart_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
 @bp.route('/favorite', methods=['POST'])
 def make_favorite():
+    """Добавить в избранное."""
     try:
         data = request.get_json()
         if not data:
@@ -49,6 +130,7 @@ def make_favorite():
 
 @bp.route('/favorite', methods=['DELETE'])
 def delete_favorite():
+    """Удалить из избранного."""
     try:
         data = request.get_json()
         if not data:
@@ -76,6 +158,7 @@ def delete_favorite():
 
 @bp.route('/get_favorites', methods=['GET'])
 def get_favorites():
+    """Получить избранное."""
     try:
         products = FavoritesProducts.query.all()
 
