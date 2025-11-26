@@ -87,7 +87,124 @@
 - `400 Bad Request` - неверные данные запроса
 - `500 Internal Server Error` - внутренняя ошибка сервера
 
-### 2. Health Check
+### 2. Добавление товара в избранное
+
+**Endpoint:** `POST /api/orders/favorite`
+
+Добавляет товар в список избранных.
+
+#### Тело запроса (JSON):
+
+```json
+{
+  "product_id": 123
+}
+```
+
+#### Параметры:
+
+- `product_id` (обязательный) - идентификатор товара
+
+#### Ответы:
+
+**Успех (201 Created):**
+```json
+{
+  "success": "Favorite product created"
+}
+```
+
+**Товар уже в избранном (208 Already Reported):**
+```json
+{
+  "success": "Favorite product already created"
+}
+```
+
+**Ошибки:**
+- `400 Bad Request` - неверные данные запроса
+- `404 Not Found` - товар не существует
+- `500 Internal Server Error` - внутренняя ошибка сервера
+
+### 3. Удаление товара из избранного
+
+**Endpoint:** `DELETE /api/orders/favorite`
+
+Удаляет товар из списка избранных.
+
+#### Тело запроса (JSON):
+
+```json
+{
+  "product_id": 123
+}
+```
+
+#### Параметры:
+
+- `product_id` (обязательный) - идентификатор товара
+
+#### Ответы:
+
+**Успех (200 OK):**
+```json
+{
+  "success": "Favorite product deleted"
+}
+```
+
+**Ошибки:**
+- `400 Bad Request` - неверные данные запроса
+- `404 Not Found` - товар не найден в избранном
+- `500 Internal Server Error` - внутренняя ошибка сервера
+
+### 4. Получение списка избранных товаров
+
+**Endpoint:** `GET /api/orders/get_favorites`
+
+Возвращает список всех избранных товаров.
+
+#### Ответы:
+
+**Успех (200 OK):**
+```json
+[
+    {
+        "id": 1,
+        "product_id": 1,
+        "product_info": {
+            "additions": [
+                "сырный бортик",
+                "острый перец",
+                "чесночный соус"
+            ],
+            "characteristics": {
+                "calories": 250,
+                "carbohydrates": 35,
+                "fat": 8,
+                "protein": 12
+            },
+            "cost": 0.067683,
+            "description": "Моцарелла, сыры чеддер и пармезан, фирменный соус альфредо",
+            "id": 1,
+            "ingredients": [
+                "фирменный соус альфредо",
+                "моцарелла",
+                "сыры чеддер",
+                "пармезан"
+            ],
+            "name": "Сырная",
+            "preview_link": "/cheese.avif",
+            "type": "pizza"
+        }
+    }
+]
+```
+
+**Ошибки:**
+- `500 Internal Server Error` - внутренняя ошибка сервера
+
+### 5. Health Check
 
 **Endpoint:** `GET /api/orders/health`
 
