@@ -31,7 +31,7 @@ function initFavorites() {
 // Загрузка списка избранных товаров
 async function loadFavorites() {
     try {
-        const response = await fetch('http://localhost/api/orders/get_favorites');
+        const response = await fetch('http://localhost/api/main/get_favorites');
 
         if (!response.ok) {
             throw new Error('Ошибка загрузки избранного');
@@ -75,7 +75,7 @@ async function toggleFavorite(productId, button) {
 // Добавление товара в избранное
 async function addToFavorites(productId) {
     try {
-        const response = await fetch('http://localhost/api/orders/favorite', {
+        const response = await fetch('http://localhost/api/main/favorite', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ function updateFavoritesTab() {
 // Обновите функцию removeFromFavorites
 async function removeFromFavorites(productId) {
     try {
-        const response = await fetch('http://localhost/api/orders/favorite', {
+        const response = await fetch('http://localhost/api/main/favorite', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
