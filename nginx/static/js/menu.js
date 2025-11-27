@@ -22,9 +22,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 content.classList.remove('active');
             });
 
-            // Особый случай для вкладки "Избранное"
+            // Особые случаи для вкладок
             if (targetTab === 'favorites') {
-                renderFavoritesTab(); // Новая функция для рендера избранного
+                if (typeof renderFavoritesTab === 'function') {
+                    renderFavoritesTab();
+                }
+            } else if (targetTab === 'recent') {
+                if (typeof renderRecentTab === 'function') {
+                    renderRecentTab();
+                }
             }
 
             // Показываем нужный контент
