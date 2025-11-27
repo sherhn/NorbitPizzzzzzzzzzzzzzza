@@ -110,48 +110,51 @@ def clear_cart_route():
 
 @bp.route('/make_order', methods=['POST'])
 def make_order():
-    """Создание нового заказа."""
+    """Создание нового заказа на основе корзины пользователя."""
     try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'JSON data required'}), 400
+        # Получаем корзину из сессии
+        cart_items = get_cart()
 
-        # Базовые проверки наличия обязательных полей
-        payment_sum = data.get('payment_sum')
-        positions = data.get('positions')
-        additions = data.get('additions')
+        # Проверяем, что корзина не пуста
+        if not cart_items:
+            return jsonify({'error': 'Cart is empty'}), 400
+
+        # Получаем общую сумму корзины
+        total = get_cart_total()
+
+        # Получаем данные адреса из JSON
+        data = request.get_json() or {}
         address = data.get('address')
 
-        # Проверка обязательных полей
-        if payment_sum is None:
-            return jsonify({'error': 'Missing payment sum'}), 400
-
-        if not positions:
-            return jsonify({'error': 'Missing positions'}), 400
-
+        # Проверка обязательного поля адреса
         if not address:
             return jsonify({'error': 'Missing address'}), 400
-
-        # Проверка типов данных
-        if not isinstance(payment_sum, (int, float)) or payment_sum <= 0:
-            return jsonify({'error': 'Invalid payment sum'}), 400
-
-        if not isinstance(positions, list) or len(positions) == 0:
-            return jsonify({'error': 'Invalid positions'}), 400
-
-        if not isinstance(additions, list):
-            return jsonify({'error': 'Invalid additions'}), 400
 
         if not isinstance(address, dict):
             return jsonify({'error': 'Invalid address'}), 400
 
+        # Преобразуем корзину в формат positions
+        positions = []
+        for item in cart_items:
+            product_info = item.get('product_info', {})
+            quantity = item.get('quantity', 0)
+            price = product_info.get('cost', 0)
+
+            positions.append({
+                'product_id': item.get('product_id'),
+                'name': product_info.get('name', ''),
+                'price': price,
+                'quantity': quantity,
+                'total': price * quantity
+            })
+
         # Создание заказа
         order = UserOrders(
             order_time=datetime.now(),
-            payment_sum=payment_sum,
+            payment_sum=total,
             payment_currency=data.get('payment_currency', 'LTC'),
             positions=positions,
-            additions=additions,
+            additions=data.get('additions', []),
             address=address,
             paid=True
         )
@@ -160,6 +163,8 @@ def make_order():
 
         try:
             db.session.commit()
+            # Очищаем корзину после успешного создания заказа
+            clear_cart()
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Order creation failed: {e}", exc_info=True)
@@ -170,7 +175,8 @@ def make_order():
             "order_time": order.order_time.isoformat(),
             "payment_sum": order.payment_sum,
             "payment_currency": order.payment_currency,
-            "paid": order.paid
+            "paid": order.paid,
+            "positions_count": len(positions)
         }
 
         return jsonify({
