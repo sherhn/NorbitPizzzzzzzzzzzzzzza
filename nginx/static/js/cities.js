@@ -1,7 +1,7 @@
 // Простая версия переключения городов
 document.addEventListener('DOMContentLoaded', function() {
     const cityButton = document.querySelector('.group:first-child button');
-    const cityText = cityButton.querySelector('span');
+    const cityText = document.getElementById('current-city');
     const cityDropdown = document.querySelector('.group:first-child .absolute');
     const cityItems = document.querySelectorAll('.group:first-child li');
 
@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
             cityText.textContent = selectedCity;
             cityDropdown.classList.add('hidden');
             console.log(`Выбран город: ${selectedCity}`);
+
+            // Обновляем город в форме доставки, если корзина открыта
+            updateDeliveryCityInCart();
         });
     });
 
@@ -31,3 +34,13 @@ document.addEventListener('DOMContentLoaded', function() {
         event.stopPropagation();
     });
 });
+
+// Обновление города доставки в корзине
+function updateDeliveryCityInCart() {
+    const deliveryCityElement = document.getElementById('delivery-city');
+    const currentCityElement = document.getElementById('current-city');
+
+    if (deliveryCityElement && currentCityElement) {
+        deliveryCityElement.textContent = currentCityElement.textContent;
+    }
+}
