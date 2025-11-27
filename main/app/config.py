@@ -13,3 +13,4 @@ class Config:
 
     CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL')
     PRODUCTS_CACHE_TTL = int(os.environ.get('PRODUCTS_CACHE_TTL', 21600))  # 6 часов
+    RECENT_PRODUCTS_CACHE_TTL = int(os.environ.get('RECENT_PRODUCTS_CACHE_TTL', 3600))  # 1 ЧАС

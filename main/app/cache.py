@@ -33,8 +33,7 @@ def update_recent_products(products_data):
     """
     redis_conn = get_redis_connection()
     current_time = time.time()
-    ttl_hours = 1  # TTL 1 час
-    ttl_seconds = ttl_hours * 3600
+    ttl_seconds = current_app.config['RECENT_PRODUCTS_CACHE_TTL']
 
     pipe = redis_conn.pipeline()
 
@@ -58,8 +57,7 @@ def get_recent_products(limit=20):
     """
     redis_conn = get_redis_connection()
     current_time = time.time()
-    ttl_hours = 1
-    ttl_seconds = ttl_hours * 3600
+    ttl_seconds = current_app.config['RECENT_PRODUCTS_CACHE_TTL']
 
     # Получаем product_id и score из sorted set
     product_scores = redis_conn.zrevrange("recent_products:score", 0, limit - 1, withscores=True)
@@ -101,8 +99,7 @@ def cleanup_expired_recent_products():
     Очистка устаревших записей о продуктах
     """
     redis_conn = get_redis_connection()
-    current_time = time.time()
-    ttl_seconds = 3600  # 1 час
+    ttl_seconds = current_app.config['RECENT_PRODUCTS_CACHE_TTL']
 
     # Получаем все product_id из sorted set
     all_products = redis_conn.zrange("recent_products:score", 0, -1)
