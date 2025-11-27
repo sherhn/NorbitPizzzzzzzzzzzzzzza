@@ -99,6 +99,7 @@ def cleanup_expired_recent_products():
     Очистка устаревших записей о продуктах
     """
     redis_conn = get_redis_connection()
+    current_time = time.time()
     ttl_seconds = current_app.config['RECENT_PRODUCTS_CACHE_TTL']
 
     # Получаем все product_id из sorted set
