@@ -4,7 +4,8 @@ from flask import Blueprint, request, jsonify, current_app, Response, session
 from .models import db, UserOrders
 from datetime import datetime
 import requests
-from .utils import add_to_cart, remove_from_cart, get_cart, clear_cart, get_cart_total, decrement_from_cart
+from .utils import add_to_cart, remove_from_cart, get_cart, clear_cart, get_cart_total, decrement_from_cart, get_redis_connection, get_cart_key, update_cart_ttl
+import json
 
 bp = Blueprint('orders', __name__)
 
@@ -108,6 +109,68 @@ def clear_cart_route():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+@bp.route('/cart/<int:product_id>/toggle_addition', methods=['POST'])
+def toggle_addition_route(product_id):
+    """Переключить состояние дополнения для товара в корзине."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'JSON data required'}), 400
+
+        addition_name = data.get('addition_name')
+        if not addition_name:
+            return jsonify({'error': 'Addition name is required'}), 400
+
+        redis_conn = get_redis_connection()
+        cart_key = get_cart_key()
+
+        # Получаем товар из корзины
+        existing_item_json = redis_conn.hget(cart_key, product_id)
+        if not existing_item_json:
+            return jsonify({'error': 'Product not found in cart'}), 404
+
+        existing_item = json.loads(existing_item_json)
+        product_info = existing_item.get('product_info', {})
+
+        # Получаем текущие дополнения из продукта
+        additions = product_info.get('additions', {})
+
+        # Если additions это список - преобразуем в словарь
+        if isinstance(additions, list):
+            additions_dict = {addition: False for addition in additions}
+            product_info['additions'] = additions_dict
+            additions = additions_dict
+
+        # Проверяем, существует ли такое дополнение
+        if addition_name not in additions:
+            return jsonify({'error': f'Addition "{addition_name}" not available for this product'}), 400
+
+        # Переключаем состояние дополнения
+        current_state = additions.get(addition_name, False)
+        additions[addition_name] = not current_state
+
+        # Обновляем информацию о продукте в корзине
+        product_info['additions'] = additions
+        existing_item['product_info'] = product_info
+
+        # Сохраняем обратно в Redis
+        redis_conn.hset(cart_key, product_id, json.dumps(existing_item))
+
+        # Обновляем TTL
+        update_cart_ttl(cart_key)
+
+        return jsonify({
+            'success': f'Addition "{addition_name}" toggled',
+            'addition_name': addition_name,
+            'new_state': not current_state,
+            'product_id': product_id
+        }), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in toggle_addition_route: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
 @bp.route('/make_order', methods=['POST'])
 def make_order():
     """Создание нового заказа на основе корзины пользователя."""
@@ -133,19 +196,33 @@ def make_order():
         if not isinstance(address, dict):
             return jsonify({'error': 'Invalid address'}), 400
 
-        # Преобразуем корзину в формат positions
+        # Преобразуем корзину в формат positions с полной информацией
         positions = []
         for item in cart_items:
             product_info = item.get('product_info', {})
             quantity = item.get('quantity', 0)
             price = product_info.get('cost', 0)
 
+            # Получаем дополнения из product_info
+            additions = product_info.get('additions', {})
+
+            # Формируем список активных дополнений
+            active_additions = []
+            if isinstance(additions, dict):
+                active_additions = [name for name, active in additions.items() if active]
+            elif isinstance(additions, list):
+                active_additions = additions  # если дополнения уже в виде списка
+
             positions.append({
                 'product_id': item.get('product_id'),
                 'name': product_info.get('name', ''),
+                'type': product_info.get('type', ''),
                 'price': price,
                 'quantity': quantity,
-                'total': price * quantity
+                'total': price * quantity,
+                'additions': active_additions,  # сохраняем только активные дополнения
+                'image_url': product_info.get('image_url', ''),
+                'description': product_info.get('description', '')
             })
 
         # Создание заказа
@@ -154,7 +231,6 @@ def make_order():
             payment_sum=total,
             payment_currency=data.get('payment_currency', 'LTC'),
             positions=positions,
-            additions=data.get('additions', []),
             address=address,
             paid=True
         )
@@ -176,7 +252,8 @@ def make_order():
             "payment_sum": order.payment_sum,
             "payment_currency": order.payment_currency,
             "paid": order.paid,
-            "positions_count": len(positions)
+            "positions_count": len(positions),
+            "positions": positions  # возвращаем полную информацию о позициях
         }
 
         return jsonify({

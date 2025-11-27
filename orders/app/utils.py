@@ -29,6 +29,10 @@ def add_to_cart(product_id, product_info):
     redis_conn = get_redis_connection()
     cart_key = get_cart_key()
 
+    # Преобразуем additions из списка в словарь если нужно
+    if 'additions' in product_info and isinstance(product_info['additions'], list):
+        product_info['additions'] = {addition: False for addition in product_info['additions']}
+
     # Проверяем, есть ли уже товар в корзине
     existing_item_json = redis_conn.hget(cart_key, product_id)
 

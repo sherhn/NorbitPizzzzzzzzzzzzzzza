@@ -20,7 +20,6 @@ class UserOrders(db.Model):
     payment_sum = db.Column(db.Double, nullable=False)  # Итоговая сумма
     payment_currency = db.Column(db.String(32), nullable=True, default='LTC')   # Валюта, LTC по дефолту
     positions = db.Column(JSONB, nullable=False)  # Все позиции
-    additions = db.Column(JSONB, nullable=False)  # Дополнения к позициям
     address = db.Column(JSONB, nullable=False)  # Адрес
     paid = db.Column(db.Boolean, nullable=False, default=False)  # Статус оплаты
 
@@ -32,7 +31,6 @@ class UserOrders(db.Model):
             "payment_sum": self.payment_sum,
             "payment_currency": self.payment_currency,
             "positions": self.positions,
-            "additions": self.additions,
             "address": self.address,
             "paid": self.paid
         }
