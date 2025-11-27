@@ -1,4 +1,3 @@
-// cart.js — единый обновлённый файл с поддержкой кнопок "Дополнительно"
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initCart, 100);
 });
