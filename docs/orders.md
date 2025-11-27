@@ -150,40 +150,21 @@
 
 ```json
 {
-  "payment_sum": 25.99,
-  "payment_currency": "LTC",
-  "positions": [
-    {
-      "id": 1,
-      "name": "Пепперони",
-      "quantity": 1,
-      "price": 19.99
-    }
-  ],
-  "additions": [
-    {
-      "id": 1,
-      "name": "Соус",
-      "quantity": 2,
-      "price": 1.50
-    }
-  ],
-  "address": {
-    "street": "ул. Примерная, д. 123",
-    "apartment": "45",
-    "entrance": "2",
-    "floor": "4",
-    "comment": "Домофон не работает"
-  }
+    "address": {
+        "street": "ул. Примерная, д. 1",
+        "city": "Москва", 
+        "zip_code": "123456",
+        "apartment": "25"
+    },
+    "payment_currency": "LTC",  // опционально, по умолчанию "LTC"
+    "additions": ["Без лука", "Срочно"]  // опционально, по умолчанию []
 }
 ```
 
 #### Параметры:
 
-- `payment_sum` (обязательный) - общая сумма заказа (число > 0)
-- `payment_currency` (опциональный) - валюта оплаты (по умолчанию 'LTC')
-- `positions` (обязательный) - массив объектов с позициями заказа
-- `additions` (обязательный) - массив объектов с дополнениями
+- `payment_currency` (опционально) - валюта оплаты (по умолчанию 'LTC')
+- `additions` (опционально) - массив объектов с дополнениями
 - `address` (обязательный) - объект с адресом доставки
 
 #### Ответы:
@@ -191,14 +172,15 @@
 **Успех (201 Created):**
 ```json
 {
-  "message": "Order created successfully",
-  "data": {
-    "order_id": 123,
-    "order_time": "2024-01-15T14:30:00.000000",
-    "payment_sum": 25.99,
-    "payment_currency": "LTC",
-    "paid": true
-  }
+    "data": {
+        "order_id": 1,
+        "order_time": "2025-11-27T08:09:15.903292",
+        "paid": true,
+        "payment_currency": "LTC",
+        "payment_sum": 0.11130200000000001,
+        "positions_count": 2
+    },
+    "message": "Order created successfully"
 }
 ```
 
