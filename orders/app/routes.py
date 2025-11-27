@@ -1,6 +1,7 @@
 """Основные маршруты."""
 
-from flask import Blueprint, request, jsonify, current_app, Response, session
+from flask import Blueprint, request, jsonify, current_app, Response
+from decimal import Decimal
 from .models import db, UserOrders
 from datetime import datetime
 import requests
@@ -183,7 +184,7 @@ def make_order():
             return jsonify({'error': 'Cart is empty'}), 400
 
         # Получаем общую сумму корзины
-        total = get_cart_total()
+        total = Decimal(str(get_cart_total()))
 
         # Получаем данные адреса из JSON
         data = request.get_json() or {}
@@ -201,7 +202,7 @@ def make_order():
         for item in cart_items:
             product_info = item.get('product_info', {})
             quantity = item.get('quantity', 0)
-            price = product_info.get('cost', 0)
+            price = Decimal(str(product_info.get('cost', 0)))
 
             # Получаем дополнения из product_info
             additions = product_info.get('additions', {})
@@ -217,9 +218,9 @@ def make_order():
                 'product_id': item.get('product_id'),
                 'name': product_info.get('name', ''),
                 'type': product_info.get('type', ''),
-                'price': price,
+                'price': float(price),
                 'quantity': quantity,
-                'total': price * quantity,
+                'total': float(price * quantity),
                 'additions': active_additions,  # сохраняем только активные дополнения
                 'image_url': product_info.get('image_url', ''),
                 'description': product_info.get('description', '')
@@ -249,7 +250,7 @@ def make_order():
         response_data = {
             "order_id": order.id,
             "order_time": order.order_time.isoformat(),
-            "payment_sum": order.payment_sum,
+            "payment_sum": float(order.payment_sum),
             "payment_currency": order.payment_currency,
             "paid": order.paid,
             "positions_count": len(positions),

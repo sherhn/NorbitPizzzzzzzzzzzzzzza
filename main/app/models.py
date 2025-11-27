@@ -5,6 +5,7 @@
 from typing import Any, Dict
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Numeric
 
 db = SQLAlchemy()
 
@@ -16,7 +17,7 @@ class MenuPosition(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False, default='Unknown')  # Название
-    cost = db.Column(db.Double, nullable=False)  # Цена
+    cost = db.Column(Numeric(12, 6), nullable=False)  # Цена с 6 знаками после запятой
     type = db.Column(db.String(32), nullable=False) # Тип продукта: пицца, закуска, напиток
     preview_link = db.Column(db.String(32), nullable=True, default='/unknown.png')   # Ссылка на превью
     description = db.Column(db.String(256), nullable=True)   # Описание позиции
@@ -29,7 +30,7 @@ class MenuPosition(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "cost": self.cost,
+            "cost": float(self.cost),
             "type": self.type,
             "preview_link": self.preview_link,
             "description": self.description,

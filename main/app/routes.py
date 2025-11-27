@@ -1,6 +1,6 @@
 """Основные маршруты."""
 
-from flask import Blueprint, request, jsonify, current_app, Response, session
+from flask import Blueprint, request, jsonify, current_app, Response
 from .cache import get_redis_connection, get_cached_products, cache_products
 from .models import MenuPosition, FavoritesProducts, db
 import json

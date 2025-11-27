@@ -4,6 +4,7 @@
 
 import json
 import redis
+from decimal import Decimal
 from flask import current_app
 
 
@@ -28,6 +29,10 @@ def add_to_cart(product_id, product_info):
     """Добавить товар в корзину или увеличить количество на 1 если уже есть."""
     redis_conn = get_redis_connection()
     cart_key = get_cart_key()
+
+    # Преобразуем cost в Decimal если он пришел как float
+    if 'cost' in product_info and isinstance(product_info['cost'], float):
+        product_info['cost'] = float(Decimal(str(product_info['cost'])).quantize(Decimal('0.000001')))
 
     # Преобразуем additions из списка в словарь если нужно
     if 'additions' in product_info and isinstance(product_info['additions'], list):
@@ -127,12 +132,13 @@ def clear_cart():
 def get_cart_total():
     """Получить общую сумму корзины."""
     cart_items = get_cart()
-    total = 0
+    total = Decimal('0')
     
     for item in cart_items:
         product_info = item['product_info']
         quantity = item['quantity']
-        cost = product_info.get('cost', 0)
+        cost = Decimal(str(product_info.get('cost', 0)))
         total += cost * quantity
     
-    return total
+    # Округляем до 6 знаков после запятой
+    return float(total.quantize(Decimal('0.000001')))
