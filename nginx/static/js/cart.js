@@ -8,6 +8,9 @@ let cartItems = [];
 let cartTotal = 0;
 let isCartLoading = false;
 
+// Аудио-объект для звука успеха
+const successSound = new Audio('/audio/success.mp3');
+
 // Инициализация корзины
 function initCart() {
     const cartButton = document.getElementById('cart-button');
@@ -753,6 +756,14 @@ async function checkout() {
         clearAddressForm();
 
         closeCart();
+
+        // ВОСПРОИЗВЕДЕНИЕ ЗВУКА УСПЕХА, я снова добавляю спорт
+        try {
+            successSound.currentTime = 0;
+            await successSound.play();
+        } catch (soundError) {
+            console.warn('Не удалось воспроизвести звук:', soundError);
+        }
 
         showCartNotification('Заказ успешно оформлен! Ожидайте доставку.', 'success');
 
