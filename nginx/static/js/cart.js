@@ -290,7 +290,7 @@ async function clearCart() {
         cartTotal = previousCartTotal;
         updateCartUI();
 
-        showCartNotification('Ошибка при очистке корзины', 'error');
+        showCartNotification('Ошибка при очистки корзины', 'error');
         throw error;
     } finally {
         isCartLoading = false;
@@ -303,6 +303,7 @@ function updateCartUI() {
     updateCartCount();
     updateCartContent();
     updateCartTotal();
+    updateAddressFormVisibility();
 }
 
 // Обновление счетчика товаров
@@ -442,6 +443,33 @@ function updateCartTotal() {
 
     cartTotalElement.textContent = `${total.toFixed(6)} Ł`;
     console.log('Обновление общей суммы:', total);
+}
+
+// Обновление видимости формы адреса
+function updateAddressFormVisibility() {
+    const addressForm = document.getElementById('address-form');
+    const checkoutButton = document.getElementById('checkout-button');
+
+    if (!addressForm || !checkoutButton) return;
+
+    if (cartItems.length > 0) {
+        addressForm.classList.remove('hidden');
+        // Обновляем город в форме доставки
+        updateDeliveryCity();
+    } else {
+        addressForm.classList.add('hidden');
+        checkoutButton.disabled = true;
+    }
+}
+
+// Обновление города доставки в форме
+function updateDeliveryCity() {
+    const deliveryCityElement = document.getElementById('delivery-city');
+    const currentCityElement = document.getElementById('current-city');
+
+    if (deliveryCityElement && currentCityElement) {
+        deliveryCityElement.textContent = currentCityElement.textContent;
+    }
 }
 
 // Увеличение количества товара
@@ -609,6 +637,53 @@ function closeCart() {
     document.body.style.overflow = 'auto';
 }
 
+// Получение данных адреса из формы
+function getAddressData() {
+    const currentCityElement = document.getElementById('current-city');
+    const streetInput = document.getElementById('street-input');
+    const apartmentInput = document.getElementById('apartment-input');
+    const entranceInput = document.getElementById('entrance-input');
+    const floorInput = document.getElementById('floor-input');
+    const commentInput = document.getElementById('comment-input');
+
+    // Проверяем обязательные поля
+    if (!streetInput.value.trim()) {
+        throw new Error('Укажите улицу и дом');
+    }
+
+    if (!apartmentInput.value.trim()) {
+        throw new Error('Укажите номер квартиры или офиса');
+    }
+
+    // Формируем полный адрес улицы
+    const streetAddress = `${streetInput.value.trim()}`;
+    
+    // Формируем объект адреса согласно требованиям
+    const address = {
+        street: streetAddress,
+        city: currentCityElement ? currentCityElement.textContent : 'Неизвестный город'
+    };
+
+    // Добавляем опциональные поля, если они заполнены
+    if (apartmentInput.value.trim()) {
+        address.apartment = apartmentInput.value.trim();
+    }
+    
+    if (entranceInput.value.trim()) {
+        address.entrance = entranceInput.value.trim();
+    }
+    
+    if (floorInput.value.trim()) {
+        address.floor = floorInput.value.trim();
+    }
+    
+    if (commentInput.value.trim()) {
+        address.comment = commentInput.value.trim();
+    }
+
+    return address;
+}
+
 // Оформление заказа
 async function checkout() {
     if (isCartLoading) return;
@@ -621,29 +696,19 @@ async function checkout() {
     isCartLoading = true;
 
     try {
-        // Подготовка данных для заказа
-        const positions = cartItems.map(item => {
-            const product = item.product_info || item;
-            return {
-                id: item.product_id || product.id,
-                name: product.name || 'Неизвестный товар',
-                quantity: item.quantity || 1,
-                price: product.cost || 0
-            };
-        });
+        // Получаем данные адреса
+        let addressData;
+        try {
+            addressData = getAddressData();
+        } catch (addressError) {
+            showCartNotification(addressError.message, 'error');
+            isCartLoading = false;
+            return;
+        }
 
+        // Подготавливаем данные заказа в новом формате
         const orderData = {
-            payment_sum: cartTotal,
-            payment_currency: "LTC",
-            positions: positions,
-            additions: [],
-            address: {
-                street: "ул. Примерная, д. 123",
-                apartment: "45",
-                entrance: "2",
-                floor: "4",
-                comment: "Доставка пиццы"
-            }
+            address: addressData
         };
 
         console.log('Отправка заказа:', orderData);
@@ -662,15 +727,19 @@ async function checkout() {
         }
 
         const result = await response.json();
+        console.log('Результат оформления заказа:', result);
 
         // Очищаем корзину после успешного заказа
-        cartItems = [];
-        cartTotal = 0;
-        updateCartUI();
+        await clearCart();
+
+        // Очищаем форму адреса
+        clearAddressForm();
 
         closeCart();
 
-        showCartNotification('Заказ успешно оформлен!', 'success');
+        showCartNotification('Заказ успешно оформлен! Ожидайте доставку.', 'success');
+
+        return result;
 
     } catch (error) {
         console.error('Ошибка оформления заказа:', error);
@@ -678,6 +747,21 @@ async function checkout() {
     } finally {
         isCartLoading = false;
     }
+}
+
+// Очистка формы адреса
+function clearAddressForm() {
+    const streetInput = document.getElementById('street-input');
+    const apartmentInput = document.getElementById('apartment-input');
+    const entranceInput = document.getElementById('entrance-input');
+    const floorInput = document.getElementById('floor-input');
+    const commentInput = document.getElementById('comment-input');
+
+    if (streetInput) streetInput.value = '';
+    if (apartmentInput) apartmentInput.value = '';
+    if (entranceInput) entranceInput.value = '';
+    if (floorInput) floorInput.value = '';
+    if (commentInput) commentInput.value = '';
 }
 
 // Показать уведомление
