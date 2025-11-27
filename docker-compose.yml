@@ -24,6 +24,8 @@ services:
     container_name: pizza_orders
     restart: unless-stopped
     depends_on:
+      redis:
+        condition: service_healthy
       db_orders:
         condition: service_healthy
     environment:
@@ -49,6 +51,8 @@ services:
     container_name: pizza_main
     restart: unless-stopped
     depends_on:
+      redis:
+        condition: service_healthy
       db_orders:
         condition: service_healthy
     environment:
