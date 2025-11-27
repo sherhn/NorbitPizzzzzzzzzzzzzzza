@@ -240,6 +240,28 @@ def make_order():
 
         try:
             db.session.commit()
+            
+            # Отправляем заказ на эндпоинт /make_recent
+            try:
+                recent_response = requests.post(
+                    f"{current_app.config.get('MAIN_SERVICE_URI')}/make_recent",
+                    json={
+                        'order_id': order.id,
+                        'products': cart_items  # Отправляем все поля продуктов из корзины
+                    },
+                    timeout=5  # 5 секунд таймаут
+                )
+                
+                if recent_response.status_code != 200:
+                    current_app.logger.warning(
+                        f"Failed to send order to recent endpoint: {recent_response.status_code}"
+                    )
+                else:
+                    current_app.logger.info("Order successfully sent to recent endpoint")
+                    
+            except requests.exceptions.RequestException as e:
+                current_app.logger.error(f"Error sending order to recent endpoint: {e}")
+            
             # Очищаем корзину после успешного создания заказа
             clear_cart()
         except Exception as e:

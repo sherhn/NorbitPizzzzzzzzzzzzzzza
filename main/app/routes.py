@@ -1,7 +1,7 @@
 """Основные маршруты."""
 
 from flask import Blueprint, request, jsonify, current_app, Response
-from .cache import get_redis_connection, get_cached_products, cache_products
+from .cache import get_redis_connection, get_cached_products, cache_products, update_recent_products, get_recent_products, cleanup_expired_recent_products
 from .models import MenuPosition, FavoritesProducts, db
 import json
 
@@ -157,6 +157,51 @@ def get_favorites():
 
     except Exception as e:
         current_app.logger.error(f'Unexpected error in get_favorites: {e}', exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/make_recent', methods=['POST'])
+def make_recent():
+    """Обновить счетчики популярности продуктов на основе заказа."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'JSON data required'}), 400
+
+        products = data.get('products', [])
+        
+        if not products:
+            return jsonify({'error': 'No products in request'}), 400
+
+        # Обновляем счетчики популярности
+        update_recent_products(products)
+        
+        current_app.logger.info(f"Updated recent products counters for {len(products)} products")
+        
+        return jsonify({'success': 'Recent products updated'}), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Error in make_recent: {e}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@bp.route('/get_recent', methods=['GET'])
+def get_recent():
+    """Получить популярные продукты, отсортированные по score."""
+    try:
+        # Очищаем устаревшие записи перед получением
+        cleanup_expired_recent_products()
+        
+        # Получаем популярные продукты
+        recent_products = get_recent_products()
+        
+        return jsonify({
+            'products': recent_products,
+            'count': len(recent_products)
+        }), 200
+
+    except Exception as e:
+        current_app.logger.error(f"Error in get_recent: {e}", exc_info=True)
         return jsonify({'error': 'Internal server error'}), 500
 
 
