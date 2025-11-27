@@ -104,7 +104,7 @@ async function addToCart(productId, button = null) {
 
     isCartLoading = true;
 
-    // ОПТИМИСТИЧНОЕ ОБНОВЛЕНИЕ: сразу увеличиваем счетчик
+    // сразу увеличиваем счетчик
     optimisticallyUpdateCartCount(1);
 
     // Блокируем кнопку
@@ -254,19 +254,36 @@ async function removeFromCart(productId) {
 }
 
 // Очистка корзины
-async function clearCart() {
-    if (isCartLoading) return;
-
-    isCartLoading = true;
+async function clearCart(skipServer = false) {
+    if (!skipServer && isCartLoading) return;
 
     // Сохраняем состояние для отката
     const previousCartItems = [...cartItems];
     const previousCartTotal = cartTotal;
 
-    // Оптимистичное обновление
+    //Локальный сборос корзины
+    function resetLocalCart() {
+    
     cartItems = [];
     cartTotal = 0;
     updateCartUI();
+
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = '0';
+        updateCartCountVisibility(0);
+    }
+}
+
+    if (skipServer) {
+        resetLocalCart();
+        return {ok: true, skipped: true};
+    }
+
+    isCartLoading = true;
+
+    resetLocalCart();
+
 
     try {
         const response = await fetch('http://localhost/api/orders/cart', {
@@ -730,7 +747,7 @@ async function checkout() {
         console.log('Результат оформления заказа:', result);
 
         // Очищаем корзину после успешного заказа
-        await clearCart();
+        await clearCart(true);
 
         // Очищаем форму адреса
         clearAddressForm();
